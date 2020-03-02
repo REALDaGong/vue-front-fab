@@ -4,6 +4,7 @@ import menus from '@/config/menu-config'
 
 import Login from '@/view/login.vue'
 import Register from '@/view/register.vue'
+import UserInfo from '@/view/userinfo.vue'
 // eslint-disable-next-line
 import mainApp from '@/main.vue'
 import error from '@/view/404.vue'
@@ -31,7 +32,11 @@ routes.push({
 {
   path: `/`,
   redirect: `/app`
-}
+},
+  {
+    path: `/userinfo`,
+    component: UserInfo
+  }
 )
 var children = []
 menus.forEach((item) => {
