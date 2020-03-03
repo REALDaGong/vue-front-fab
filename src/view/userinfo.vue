@@ -32,10 +32,10 @@
                   <el-tab-pane label="基本信息" name="first">
                     <el-form label-position="right" label-width="80px" :model="userinfo">
                       <el-form-item label="用户名">
-                        <el-input id="nameinput" v-model="userinfo.userName"></el-input>
+                        <el-input v-model="userinfo.name" disabled="true"></el-input>
                       </el-form-item>
-                      <el-form-item label="ID">
-                        <el-input v-model="userinfo.userId" disabled="true"></el-input>
+                      <el-form-item label="学生ID">
+                        <el-input id="stunuminput" v-model="userinfo.stuNumber"></el-input>
                       </el-form-item>
                       <el-form-item label="大学">
                         <el-input id="uniinput" v-model="userinfo.university"></el-input>
@@ -53,7 +53,7 @@
                         <el-input id="emailinput" v-model="userinfo.email"></el-input>
                       </el-form-item>
                       <el-form-item label="手机号码">
-                        <el-input id="phoneinput" v-model="userinfo.mobilePhone"></el-input>
+                        <el-input id="phoneinput" v-model="userinfo.phone"></el-input>
                       </el-form-item>
                       <el-form-item>
                         <el-button type="primary" @click="onSubmitOnUserinfoPage">立即修改</el-button>
@@ -72,6 +72,8 @@
 </template>
 
 <script>
+  import $ from 'jquery'
+  import axios from 'axios'
   export default {
     data () {
       return {
@@ -79,6 +81,9 @@
           mobilePhone:"123456"
         }
       }
+    },
+    beforeMount() {
+      this.finduserinfo(localStorage.getItem("name"));
     },
     methods: {
       getInput: function () {
@@ -95,30 +100,30 @@
         let newgender = $("#genderinput").val();
         let newemail = $("#emailinput").val();
         let newmobilePhone = $("#phoneinput").val();
-        this.updateuserinfo(localStorage.getItem("userName"), newStuNum,newUni,newMajor, newgender, newemail, newmobilePhone);
+        this.updateuserinfo("stu1", newStuNum,newUni,newMajor, newgender, newemail, newmobilePhone);
         this.open1();
       },
       updateuserinfo: function (_username, _stunum,_uni,_major, _gender, _email, _mobilephone) {
         let data = {
           userName: _username,
-          stuName:_stunum,
+          stuNumber:_stunum,
           gender: _gender,
           email: _email,
           phone: _mobilephone,
           uni:_uni,
           major:_major
         };
-        axios.post("/fixstuinfo", data).then(function (response) {
-          this.updateuser(response.data.userInfo)
+        axios.post("http://localhost:8080/fixstuinfo", data).then(function (response) {
+          this.updateuser(response.data.result)
         }.bind(this));
       },
       finduserinfo: function (_userName) {
-        axios.get('/searchStu', {
+        axios.get('http://localhost:8080/searchStu', {
           params:{
-            "username": localStorage.getItem("userName")
+            "username": _userName
           }
         }).then(function (response) {
-          this.updateuser(response.data.userInfo)
+          this.updateuser(response.data.result)
         }.bind(this));
       },
       updateuser: function (data) {
