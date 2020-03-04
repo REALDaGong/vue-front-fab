@@ -4,7 +4,10 @@ import menus from '@/config/menu-config'
 
 import Login from '@/view/login.vue'
 import Register from '@/view/register.vue'
+
+
 import SubprojectDetail from '@/view/subprojectDetail.vue'
+import UserInfo from '@/view/userinfo.vue'
 
 // eslint-disable-next-line
 import mainApp from '@/main.vue'
@@ -15,6 +18,7 @@ Vue.use(Router)
 var routes = []
 
 routes.push({
+
     path: `/app`,
     component: mainApp
   },
@@ -38,6 +42,11 @@ routes.push({
   {
     path: `/`,
     redirect: `/app`
+
+  },
+  {
+    path: `/userinfo`,
+    component: UserInfo
   }
 )
 var children = []
