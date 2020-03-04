@@ -4,34 +4,41 @@ import menus from '@/config/menu-config'
 
 import Login from '@/view/login.vue'
 import Register from '@/view/register.vue'
+import SubprojectDetail from '@/view/subprojectDetail.vue'
+
 // eslint-disable-next-line
 import mainApp from '@/main.vue'
 import error from '@/view/404.vue'
+
 Vue.use(Router)
 
 var routes = []
 
 routes.push({
-  path: `/app`,
-  component: mainApp
-},
-{
-  path: `/login`,
-  name: `Login`,
-  component: Login
-},
-{
-  path: `/register`,
-  component: Register
-},
-{
-  path: `*`,
-  component: error
-},
-{
-  path: `/`,
-  redirect: `/app`
-}
+    path: `/app`,
+    component: mainApp
+  },
+  {
+    path: `/login`,
+    name: `Login`,
+    component: Login
+  },
+  {
+    path: `/register`,
+    component: Register
+  },
+  {
+    path: `/subprojectDetail`,
+    component: SubprojectDetail
+  },
+  {
+    path: `*`,
+    component: error
+  },
+  {
+    path: `/`,
+    redirect: `/app`
+  }
 )
 var children = []
 menus.forEach((item) => {
@@ -56,4 +63,4 @@ menus.forEach((item) => {
   }
 })
 
-export default new Router({ routes })
+export default new Router({routes})

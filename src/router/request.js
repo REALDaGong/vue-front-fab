@@ -95,10 +95,6 @@ export function queryAllAppendixForSub (data) {
   })
 }
 
-export function uploadAppendixForSub (data) {
-  // ?????? get?
-}
-
 export function createProject (data) {
   return Service({
     url: 'createProject',
