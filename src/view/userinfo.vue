@@ -10,10 +10,10 @@
               <el-row>
                 <el-col :span="4">
                   <div v-model="userinfo" class="username">
-                    {{userinfo.userName}}
+                    {{userinfo.name}}
                   </div>
                   <div v-model="userinfo" class="userid">
-                    ID:{{userinfo.userId}}
+                    ID:{{userinfo.stuNumber}}
                   </div>
                 </el-col>
               </el-row>
@@ -77,9 +77,7 @@
   export default {
     data () {
       return {
-        userinfo:{userName:"jia",userType:"author",gender:"male",email:"99@qq.com",
-          mobilePhone:"123456"
-        }
+        userinfo:{}
       }
     },
     beforeMount() {
@@ -118,16 +116,13 @@
         }.bind(this));
       },
       finduserinfo: function (_userName) {
-        axios.get('http://localhost:8080/searchStu', {
-          params:{
-            "username": _userName
-          }
-        }).then(function (response) {
+        let data ={userName: "stu1"};
+        axios.post('http://localhost:8080/searchStu', data).then(function (response) {
           this.updateuser(response.data.result)
         }.bind(this));
       },
       updateuser: function (data) {
-        this.userinfo = data.result;
+        this.userinfo = data;
       },
       open1: function () {
         this.$notify({
