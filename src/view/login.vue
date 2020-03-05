@@ -8,11 +8,14 @@
 
         <form class="login100-form validate-form">
           <span class="login100-form-title">
-            会员登陆
+            会员登录
           </span>
-
           <div class="wrap-input100 validate-input">
-            <input class="input100" type="text" v-model="email" placeholder="邮箱">
+          <el-radio v-model="radio" label="0">学生登录</el-radio>
+          <el-radio v-model="radio" label="1">教师登录</el-radio>
+          </div>
+          <div class="wrap-input100 validate-input">
+            <input class="input100" type="text" v-model="name" placeholder="用户名">
             <span class="focus-input100"></span>
             <span class="symbol-input100">
               <i class="fa fa-envelope" aria-hidden="true"></i>
@@ -53,13 +56,23 @@
 
 <script>
 import {login} from '@/router/request'
-
+import {tokenGen} from '@/utils/safety'
 export default {
   data () {
     return {
       status: {},
-      email: '',
-      password: ''
+      name: '',
+      password: '',
+      radio: '0'
+    }
+  },
+  created:function(){
+    if (typeof localStorage.name !== 'undefined') {
+      if (localStorage.token === tokenGen(this.name,this.identity)){
+        this.$router.push({path:'/app'})
+      } else {
+        localStorage.name = undefined
+      }
     }
   },
   methods: {
@@ -67,13 +80,24 @@ export default {
       if (this.password === '' || this.email === '') {
         return
       }
-      console.log('ok')
       var data = {
-        identity: 'student',
-        name: this.email,
+        identity: this.radio === '0' ?'student':'teacher',
+        name: this.name,
         password: this.password
       }
-      login(data).then(res => console.log(res)).catch(res => console.log(res.response))
+      login(data)
+        .then(
+          res => {
+            console.log(res)
+            localStorage.name=this.name
+            localStorage.identity=this.radio === '0' ?'student':'teacher'
+            localStorage.token=tokenGen(localStorage.name,localStorage.identity)
+            this.$router.push({path:'/app'})
+          }
+        )
+        .catch(
+          res => console.log(res.response)
+        )
     }
   }
 }

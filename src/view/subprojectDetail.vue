@@ -3,29 +3,29 @@
     <div class="block">
       <el-divider></el-divider>
       <el-row>
-        <el-col span="3">
+        <el-col :span="3">
           <p></p>
         </el-col>
-        <el-col span="11">
+        <el-col :span="11">
           <el-tabs v-model="activeName">
             <el-tab-pane label="子项目基本信息" name="first">
               <el-card>
                 <div slot="header" style="text-align: center">
                   <span>子项目描述</span>
                 </div>
-                <h4 style="font-size: 16px;font-style:oblique;color:teal;text-align: center">这个子项目主要为了收集答辩所需的图片素材</h4>
+                <h4 style="font-size: 16px;font-style:oblique;color:teal;text-align: center">{{sub.Value.info}}</h4>
                 <el-divider content-position="right">所属项目ID</el-divider>
-                <h4 style="font-size: 16px;font-style:oblique">&nbsp&nbsp&nbsp&nbsp{{sub.Value.proID}}</h4>
+                <h4 style="font-size: 16px;font-style:oblique">&nbsp;&nbsp;&nbsp;&nbsp;{{sub.Value.proID}}</h4>
                 <el-divider content-position="right">子项目ID</el-divider>
-                <h4 style="font-size: 16px;font-style:oblique">&nbsp&nbsp&nbsp&nbsp{{sub.Value.subproID}}</h4>
+                <h4 style="font-size: 16px;font-style:oblique">&nbsp;&nbsp;&nbsp;&nbsp;{{sub.Value.subproID}}</h4>
                 <el-divider content-position="right">子项目难度</el-divider>
-                <h4 style="font-size: 16px;font-style:oblique">&nbsp&nbsp&nbsp&nbsp{{sub.Value.difficulty}}</h4>
+                <h4 style="font-size: 16px;font-style:oblique">&nbsp;&nbsp;&nbsp;&nbsp;{{sub.Value.difficulty}}</h4>
                 <el-divider content-position="right">开始时间</el-divider>
-                <h4 style="font-size: 16px;font-style:oblique">&nbsp&nbsp&nbsp&nbsp{{sub.Value.subproStartTime}}</h4>
+                <h4 style="font-size: 16px;font-style:oblique">&nbsp;&nbsp;&nbsp;&nbsp;{{sub.Value.subproStartTime}}</h4>
                 <el-divider content-position="right">截止时间</el-divider>
-                <h4 style="font-size: 16px;font-style:oblique">&nbsp&nbsp&nbsp&nbsp{{sub.Value.subproEndTime}}</h4>
+                <h4 style="font-size: 16px;font-style:oblique">&nbsp;&nbsp;&nbsp;&nbsp;{{sub.Value.subproEndTime}}</h4>
                 <el-divider content-position="right">当前版本</el-divider>
-                <h4 style="font-size: 16px;font-style:oblique">&nbsp&nbsp&nbsp&nbsp{{sub.Timestamp.split(".")[0]}}</h4>
+                <h4 style="font-size: 16px;font-style:oblique">&nbsp;&nbsp;&nbsp;&nbsp;{{sub.Timestamp.split(".")[0]}}</h4>
                 <p></p>
               </el-card>
             </el-tab-pane>
@@ -143,16 +143,26 @@
                   <h3 class="medium" style="text-align: center;font-size: 24px">{{ item }}</h3>
                 </el-carousel-item>
               </el-carousel>
-              <el-button type="primary" v-if="this.identity=='student'" @click="joinSub">加入该子项目</el-button>
-              <el-button type="danger" v-if="this.identity=='student'" @click="quitSub">退出该子项目</el-button>
+              <el-button type="primary" v-if="this.identity==='student'" @click="joinSub">加入该子项目</el-button>
+              <el-button type="danger" v-if="this.identity==='student'" @click="quitSub">退出该子项目</el-button>
+              <el-button type="primary" v-if="this.identity==='teacher'" @click="scoreSub">为子项目打分</el-button>
+              <el-dialog>
+                <el-form-item label="请为该子项目打分" :label-width="formLabelWidth">
+                </el-form-item>
+                <el-form-item label="分数" :label-width="formLabelWidth">
+                  <el-input-number size="small" v-model="score"></el-input-number>
+                </el-form-item>
+                <el-button @click="scoreFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="startScore">确 定</el-button>
+              </el-dialog>
             </el-tab-pane>
           </el-tabs>
 
         </el-col>
-        <el-col span="1">
+        <el-col :span="1">
           <p></p>
         </el-col>
-        <el-col span="6">
+        <el-col :span="6">
           <div class="timeline" v-for="(sub,i) in subHistory">
             <el-timeline>
               <el-timeline-item :timestamp="sub.Timestamp.split(' ')[0]" placement="top">
@@ -165,7 +175,7 @@
             </el-timeline>
           </div>
         </el-col>
-        <el-col span="3">
+        <el-col :span="3">
           <p>
           </p>
         </el-col>
@@ -177,7 +187,7 @@
 
 
 <script>
-  import {queryHistoryOfSubproject, joinSubproject, quitSubproject, addComment, searchStu} from '@/router/request'
+  import {queryHistoryOfSubproject, joinSubproject, quitSubproject, addComment, searchStu, score} from '@/router/request'
   import axios from 'axios'
   import $ from 'jquery'
 
@@ -192,12 +202,15 @@
         userName: localStorage.getItem("name"),
         identity: localStorage.getItem("identity"),
         dialogFormVisible: false,
+        scoreFormVisible: false,
         form: {
           content: "",
           score: {}
         },
         formLabelWidth: '120px',
-        memberInfo: []
+        memberInfo: [],
+        scoreBuffer: {},
+        score: '0'
       }
     },
     beforeMount() {
@@ -269,6 +282,33 @@
               console.log(res.Response)
             }
           )
+      },
+      scoreSub: function () {
+        this.scoreBuffer = {proID: window.location.href.split("?id=")[1],score: '0'}
+        this.scoreFormVisible = true
+      },
+      startScore : function () {
+        this.scoreBuffer.score = this.score
+        score(scoreBuffer)
+        .then(res => {
+          if (res.result.status === 'right') {
+            this.$message({
+              type: 'success',
+              message: '成功评分'
+            })
+          } else {
+            this.$message({
+              type: 'error',
+              message: '网络错误'
+            })
+          }
+        })
+        .catch(res => {
+          this.$message({
+            type: 'error',
+            message: '网络错误'
+          })
+        })
       },
       addNewComment: function (con, sco) {
         var data = {

@@ -14,6 +14,7 @@ export const Service = axios.create({
     'Access-Control-Allow-Origin': 'http://localhost:8081'
   }
 })
+/*
 // 添加请求拦截器
 Service.interceptors.request.use(config => {
   loadingInstance = Loading.service({
@@ -22,9 +23,10 @@ Service.interceptors.request.use(config => {
   })
   return config
 })
+*/
 // 添加响应拦截器
 Service.interceptors.response.use(response => {
-  loadingInstance.close()
+  // loadingInstance.close()
   // console.log(response)
   return response.data
 }, error => {
@@ -35,6 +37,6 @@ Service.interceptors.response.use(response => {
     type: 'error',
     duration: 3 * 1000
   })
-  loadingInstance.close()
+  // loadingInstance.close()
   return Promise.reject(error)
 })

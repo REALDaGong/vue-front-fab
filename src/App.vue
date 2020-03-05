@@ -8,8 +8,13 @@ import {test} from '@/router/request'
 
 export default {
   name: 'app',
+  beforeMount () {
+    if(typeof localStorage.name === 'undefined'){
+      this.$router.push({path:'/login'})
+    }
+  },
   mounted () {
-    test().then(res => console.log(res)).catch(res => console.log(res))
+    // test().then(res => console.log(res)).catch(res => console.log(res))
   }
 }
 

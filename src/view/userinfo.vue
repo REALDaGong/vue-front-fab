@@ -28,11 +28,11 @@
             <!--            card-->
             <el-card class="box-card2">
               <template>
-                <el-tabs  @tab-click="handleClickOnUserinfoPage">
+                <el-tabs v-model="activeTab" @tab-click="handleClickOnUserinfoPage">
                   <el-tab-pane label="基本信息" name="first">
                     <el-form label-position="right" label-width="80px" :model="userinfo">
                       <el-form-item label="用户名">
-                        <el-input v-model="userinfo.name" disabled="true"></el-input>
+                        <el-input v-model="userinfo.name" :disabled="true"></el-input>
                       </el-form-item>
                       <el-form-item label="学生ID">
                         <el-input id="stunuminput" v-model="userinfo.stuNumber"></el-input>
@@ -45,8 +45,8 @@
                       </el-form-item>
                       <el-form-item label="性别">
                         <el-select id="genderinput" v-model="userinfo.gender" placeholder="请选择性别">
-                          <el-option label="male" value="male"></el-option>
-                          <el-option label="female" value="female"></el-option>
+                          <el-option label="男" value="male"></el-option>
+                          <el-option label="女" value="female"></el-option>
                         </el-select>
                       </el-form-item>
                       <el-form-item label="Email">
@@ -72,12 +72,14 @@
 </template>
 
 <script>
+  import {fixstuinfo, searchStu} from '@/router/request'
   import $ from 'jquery'
   import axios from 'axios'
   export default {
     data () {
       return {
-        userinfo:{}
+        userinfo:{},
+        activeTab: 'first'
       }
     },
     beforeMount() {
@@ -111,13 +113,13 @@
           uni:_uni,
           major:_major
         };
-        axios.post("http://localhost:8080/fixstuinfo", data).then(function (response) {
+        fixstuinfo(data).then(function (response) {
           this.updateuser(response.data.result)
         }.bind(this));
       },
       finduserinfo: function (_userName) {
-        let data ={userName: "stu1"};
-        axios.post('http://localhost:8080/searchStu', data).then(function (response) {
+        let data ={userName: localStorage.name};
+        searchStu(data).then(function (response) {
           this.updateuser(response.data.result)
         }.bind(this));
       },
@@ -189,9 +191,9 @@
   /*layout*/
   .el-row {
     margin-bottom: 20px;
-  &:last-child {
-     margin-bottom: 0;
-   }
+    /*&:last-child {
+      margin-bottom: 0;
+    }*/
   }
   .el-col {
     border-radius: 4px;

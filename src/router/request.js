@@ -23,7 +23,7 @@ export function register (data) {
   })
 }
 
-export function sesrchSIPByStu (data) {
+export function searchSIPByStu (data) {
   return Service({
     url: 'sesrchSIPByStu',
     method: 'post',
@@ -95,6 +95,10 @@ export function queryAllAppendixForSub (data) {
   })
 }
 
+export function uploadAppendixForSub (data) {
+  // ?????? get?
+}
+
 export function createProject (data) {
   return Service({
     url: 'createProject',
@@ -121,7 +125,7 @@ export function quitProject (data) {
 
 export function addProMember (data) {
   return Service({
-    url: 'addProMember',
+    url: 'AddProMember',
     method: 'post',
     data: JSON.stringify(data)
   })
@@ -130,7 +134,7 @@ export function addProMember (data) {
 // sesrch?
 export function searchProinfo (data) {
   return Service({
-    url: 'searchProinfo',
+    url: 'sesrchProinfo',
     method: 'post',
     data: JSON.stringify(data)
   })
@@ -143,3 +147,26 @@ export function searchStu (data) {
     data: JSON.stringify(data)
   })
 }
+
+export function sesrchSIPByproID (data) {
+  return Service({
+    url: 'sesrchSIPByproID',
+    method: 'post',
+    data: JSON.stringify(data)
+  })
+} 
+
+export function score (data) {
+  return Service({
+    url: 'score',
+    method: 'post',
+    data: JSON.stringify(data)
+  })
+} 
+export function fixstuinfo (data) {
+  return Service({
+    url: 'fixstuinfo',
+    method: 'post',
+    data: JSON.stringify(data)
+  })
+} 

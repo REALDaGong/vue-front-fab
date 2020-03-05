@@ -49,30 +49,25 @@
                   <i class="fa fa-envelope" aria-hidden="true"></i>
                 </span>
               </div>
-
               <div class="wrap-input100 validate-input">
-                <input class="input100" type="text" v-model="gender" placeholder="性别">
-                <span class="focus-input100"></span>
-                <span class="symbol-input100">
-                  <i class="fa fa-envelope" aria-hidden="true"></i>
-                </span>
+                <span class="el-radio-pad">性别</span>
+                <el-radio v-model="gender" label="male">男</el-radio>
+                <el-radio v-model="gender" label="female">女</el-radio>
               </div>
-
               <div class="wrap-input100 validate-input">
-                <input class="input100" type="text" v-model="role" placeholder="角色">
-                <span class="focus-input100"></span>
-                <span class="symbol-input100">
-                  <i class="fa fa-envelope" aria-hidden="true"></i>
-                </span>
+                <span class="el-radio-pad">身份</span>
+                <el-radio v-model="role" label="student">学生</el-radio>
+                <el-radio v-model="role" label="teacher">老师</el-radio>
               </div>
-
-              <div class="wrap-input100 validate-input">
-                <input class="input100" type="text" v-model="no" placeholder="学号">
-                <span class="focus-input100"></span>
-                <span class="symbol-input100">
-                  <i class="fa fa-envelope" aria-hidden="true"></i>
-                </span>
-              </div>
+              <transition name="el-zoom-in-top">
+                <div v-show="show" class="wrap-input100 validate-input">
+                  <input class="input100" type="text" v-model="no" placeholder="学号">
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </transition>
             </div>
           </div>
           <div class="container-login100-form-btn">
@@ -98,16 +93,16 @@ export default {
       pass: '',
       passver: '',
       uniname: '',
-      gender: '',
-      role: '',
-      no: ''
+      gender: 'male',
+      role: 'student',
+      no: '',
+      show: true
     }
   },
   methods: {
     reg () {
       var data = {
-        // identity: this.role,
-        identity: 'student',
+        identity: this.role,
         name: this.name,
         password: this.pass,
         gender: this.gender,
@@ -119,6 +114,7 @@ export default {
         .then(
           res => {
             console.log(res)
+            this.$router.push({path:'/login'})
           }
         )
         .catch(
@@ -126,6 +122,15 @@ export default {
             console.log(res.Response)
           }
         )
+    }
+  },
+  watch: {
+    role : function () {
+      if(this.role === 'student'){
+        this.show = true
+      } else {
+        this.show = false
+      }
     }
   }
 }
@@ -148,5 +153,35 @@ body {
 }
 .reg100-wrap-block{
   justify-content: center;
+}
+.el-radio {
+    color: #606266;
+    font-weight: 500;
+    line-height: 1;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    white-space: nowrap;
+    outline: none;
+    font-size: 14px;
+    margin-right: 30px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+.el-radio-pad {
+    color: #606266;
+    font-weight: 500;
+    line-height: 1;
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    outline: none;
+    font-size: 14px;
+    margin-right: 30px;
+    margin-left: 30px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 </style>

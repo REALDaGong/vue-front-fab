@@ -7,20 +7,12 @@ export default [{
         componentName: 'ProjectList'
     }],
     child: [{
-        name: '公告',
-        componentName: 'ProjectAnnouncement'
-    },
-    {
-        name: '时间轴',
-        componentName: 'ProjectTimeline'
-    },
-    {
         name: '子项目',
         componentName: 'ProjectSub'
     },
     {
-        name: '上传文件',
-        componentName: 'ProjectUpload'
+        name: '项目成员',
+        componentName: 'ProjectMember'
     }]
     },{
     name: '反馈',

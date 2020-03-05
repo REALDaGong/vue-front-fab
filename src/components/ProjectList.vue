@@ -6,14 +6,17 @@
         <div id="list">
           项目列表
           <el-divider></el-divider>
-          <projectlistcontent></projectlistcontent>
+          <projectlistcontent ref="content" :change="changeRightContent"></projectlistcontent>
         </div>
         <div id="add">
-          <el-button type="success" icon="el-icon-search" circle @click="searchFormVisible = true"></el-button>
           <el-button type="success" icon="el-icon-plus" circle @click="dialogFormVisible = true"></el-button>
           <el-button type="success" icon="el-icon-refresh-left" circle @click="fetchAllProject"></el-button>
-          <el-dialog title="新活动" :visible.sync="dialogFormVisible">
-            <el-form :model="form">
+          <el-dialog title="新建项目" :visible.sync="dialogFormVisible">
+            <el-radio-group v-model="formPage" class="buttons">
+              <el-radio-button label="新建"></el-radio-button>
+              <el-radio-button label="加入"></el-radio-button>
+            </el-radio-group>
+            <el-form :model="form" :class="{inactive:isNewClosed}">
               <el-form-item label="活动名称" :label-width="formLabelWidth">
                 <el-input v-model="form.name" autocomplete="off"></el-input>
               </el-form-item>
@@ -30,6 +33,11 @@
               </el-form-item>
               <el-form-item label="活动形式" :label-width="formLabelWidth">
                 <el-input type="textarea" v-model="form.desc"></el-input>
+              </el-form-item>
+            </el-form>
+            <el-form :model="form" :class="{inactive:isJoinClosed}">
+              <el-form-item label="项目ID" :label-width="formLabelWidth">
+                <el-input v-model="form.proID" autocomplete="off"></el-input>
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -50,12 +58,10 @@
       <el-col :span="18">
         <el-main id="content">
           <el-menu router class="el-menu-demo" mode="horizontal" @select="handleSelect" @open="handleOpen" @close="handleClose">
-            <el-menu-item index="/app/projectlist/projectannouncement">公告</el-menu-item>
-            <el-menu-item index="/app/projectlist/projecttimeline">时间轴</el-menu-item>
             <el-menu-item index="/app/projectlist/projectSub">子项目</el-menu-item>
-            <el-menu-item index="/app/projectlist/projectupload">文件</el-menu-item>
+            <el-menu-item index="/app/projectlist/projectMember">成员</el-menu-item>
           </el-menu>
-          <router-view></router-view>
+          <router-view :proID="selectedProID"></router-view>
         </el-main>
       </el-col>
     </el-row>
@@ -64,7 +70,7 @@
 
 <script>
 import ProjectListContent from '@/components/ProjectListContent'
-import {sesrchSIPByStu, createProject} from '@/router/request'
+import {createProject, addProMember} from '@/router/request'
 import {formatDate} from '@/utils/dateFormatter'
 
 export default {
@@ -72,7 +78,7 @@ export default {
     return {
       pickerOptions: {
         disabledDate (time) {
-          return time.getTime() > Date.now()
+          return time.getTime() < Date.now()
         },
         shortcuts: [{
           text: '今天',
@@ -100,13 +106,18 @@ export default {
         name: '',
         Tname: '',
         date: new Date(),
-        desc: ''
+        desc: '',
+        proID: ''
       },
       searchFormVisible: false,
       searchName: '',
       searchResultString: '请输入项目内的成员名',
       formLabelWidth: '120px',
-      userName: 'ghd'
+      userName: 'ghd',
+      formPage: '新建',
+      isNewClosed: false,
+      isJoinClosed: true,
+      selectedProID: ''
     }
   },
   components: {
@@ -119,6 +130,15 @@ export default {
     searchName: function (newInput, oldInput) {
       this.searchResultString = ''
       this.debouncedGetQuery()
+    },
+    formPage: function () {
+      if(this.formPage === '新建'){
+        this.isNewClosed = false
+        this.isJoinClosed = true
+      }else{
+        this.isNewClosed = true
+        this.isJoinClosed = false
+      }
     }
   },
   methods: {
@@ -146,35 +166,51 @@ export default {
         })
     },
     newProject () {
+      if (this.isJoinClosed == false){
+        addProMember({proID: this.form.ProID,stuName: localStorage.name})
+            .then(res => {
+              console.log(res)
+            })
+            .catch(res => {
+              console.log(res.response)
+            })
+      } else {
       var data = {
-        info: this.form.name,
-        leaderName: 'leader',
+        info: this.form.desc,
+        leaderName: localStorage.name,
         teacherName: this.form.Tname,
         startTime: formatDate(new Date()),
-        endTime: this.form.date
+        endTime: formatDate(this.form.date),
+        proName: this.form.name
       }
-      createProject(data)
-        .then(res => {
-          console.log(res)
-          this.dialogFormVisible = false
-        })
-        .catch(res => {
-             console.log(res)
-          this.dialogFormVisible = false
-        })
+        createProject(data)
+          .then(res => {
+            console.log(res)
+            addProMember({proID: res.ProID,stuName: localStorage.name})
+            .then(res => {
+              console.log(res)
+            })
+            .catch(res => {
+              console.log(res.response)
+            })
+            this.dialogFormVisible = false
+          })
+          .catch(res => {
+            console.log(res)
+            this.dialogFormVisible = false
+          })
+      }
     },
     fetchAllProject () {
-      sesrchSIPByStu({stuName: this.userName})
-        .then(
-          res => {
-            console.log(res)
-          }
-        )
-        .catch(
-          res => {
-            console.log(res)
-          }
-        )
+      this.$refs.content.refresh()
+    },
+    changeRightContent (proID) {
+      this.selectedProID = proID
+      localStorage.selectedProID = proID // bad action...
+      // this.$refs.sub.refresh(proID)
+    },
+    getCurrentProID () {
+      return this.selectedProID
     }
   }
 }
@@ -216,5 +252,11 @@ export default {
   position: absolute;
   bottom: 10px;
   left: 10px;
+}
+.inactive{
+  display: none;
+}
+.buttons{
+  margin-bottom: 10px;
 }
 </style>
