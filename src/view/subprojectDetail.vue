@@ -79,9 +79,9 @@
                 <br>
                 <input id="file" class="file" style="visibility: hidden" type="file" title="请选择文件" value="请选择文件">
                 <span>
-                  <el-button style="margin-left: 10px;" size="small" type="primary" @click="bindTwoButton">选择文件
+                  <el-button style="margin-left: 45px;" size="small" type="primary" @click="bindTwoButton">选择文件
                 </el-button>
-                <el-button style="margin-left: 10px;" size="small" type="primary" @click="submit">上传至服务器
+                <el-button style="margin-left: 65px;" size="small" type="primary" @click="submit">上传
                 </el-button></span>
               </el-card>
             </el-tab-pane>
@@ -94,10 +94,10 @@
                 </div>
                 <el-dialog title="评论" :visible.sync="dialogFormVisible">
                   <el-form :model="form">
-                    <el-form-item label="评论内容" :label-width="formLabelWidth">
+                    <el-form-item prop="content"  label="评论内容" :label-width="formLabelWidth">
                       <el-input v-model="form.content" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="对该子项目打分" :label-width="formLabelWidth">
+                    <el-form-item required="true" label="对该子项目打分" :label-width="formLabelWidth">
                       <div class="block">
                         <span class="demonstration"></span>
                         <el-rate
@@ -138,9 +138,14 @@
               </el-card>
             </el-tab-pane>
             <el-tab-pane label="成员列表" name="fourth" @tab-click="getMember">
-              <el-carousel :interval="4000" type="card" height="400px">
-                <el-carousel-item v-for="item in sub.Value.member" :key="item">
-                  <h3 class="medium" style="text-align: center;font-size: 24px">{{ item }}</h3>
+              <el-carousel :interval="4000" type="card" height="300px">
+                <el-carousel-item v-for="(mem,i) in memberInfo">
+                  <div>
+                    <h3 class="medium"
+                        style="text-align:center;font-size: 16px;opacity: 0.99;line-height: 50px;margin: 0;">
+                      {{i+1}}<br>用户名：{{ mem.name }}<br>学校：{{mem.university}}<br>专业：{{mem.major}}<br>学号：{{mem.stuNumber}}
+                    </h3>
+                  </div>
                 </el-carousel-item>
               </el-carousel>
               <el-button type="primary" v-if="this.identity==='student'" @click="joinSub">加入该子项目</el-button>
@@ -157,7 +162,6 @@
               </el-dialog>
             </el-tab-pane>
           </el-tabs>
-
         </el-col>
         <el-col :span="1">
           <p></p>
@@ -222,6 +226,7 @@
           res => {
             this.subHistory = res.result;
             this.sub = this.subHistory[this.subHistory.length - 1];
+            this.getMember();
           }
         )
         .catch(
@@ -231,14 +236,15 @@
     methods: {
       getMember: function () {
         var i = 0;
+        this.memberInfo.length = 0;
         for (i = 0; i < this.sub.Value.member.length; i++) {
           var name = {
-            stuName: this.sub.Value.member[i]
+            userName: this.sub.Value.member[i]
           }
           searchStu(name)
             .then(
               res => {
-                this.memberInfo.append(res)
+                this.memberInfo.push(res.result)
               }
             )
             .catch(
@@ -249,16 +255,23 @@
         }
       },
       getSub: function (i) {
-        this.sub = this.subHistory[i]
+        this.sub = this.subHistory[i];
+        this.getMember();
       },
       joinSub: function () {
         var data = {
           subproID: this.subproID,
           stuName: this.userName
         }
+        if (this.sub.Value.member.indexOf(data.stuName) != -1) {
+          alert("您已经在该子项目中！")
+          return false
+        }
         joinSubproject(data)
           .then(
             res => {
+              alert("加入子项目成功！");
+              location.reload()
             }
           )
           .catch(
@@ -272,9 +285,15 @@
           subproID: this.subproID,
           stuName: this.userName
         }
+        if (this.sub.Value.member.indexOf(data.stuName) == -1) {
+          alert("您不在该子项目中，无法退出！")
+          return false
+        }
         quitSubproject(data)
           .then(
             res => {
+              alert("退出子项目成功！");
+              location.reload();
             }
           )
           .catch(
@@ -339,6 +358,11 @@
         formData.append('description', "这是一条描述")
         formData.append('subproID', this.subproID)
         //'userfile'是formData这个对象的键名
+        if(document.querySelector('#file').files[0]==undefined)
+        {
+          alert("您没有选择文件，无法上传！");
+          return false
+        }
         axios({
           url: 'http://localhost:8080/uploadAppendixForSub',   //****: 你的ip地址
           data: formData,
@@ -412,13 +436,6 @@
     padding: 10px 0;
   }
 
-  .el-carousel__item h3 {
-    color: #475669;
-    font-size: 14px;
-    opacity: 0.75;
-    line-height: 200px;
-    margin: 0;
-  }
 
   .el-carousel__item:nth-child(2n) {
     background-color: #99a9bf;
@@ -428,7 +445,12 @@
     background-color: #d3dce6;
   }
 
-  .file {
-    color: deepskyblue;
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
   }
 </style>

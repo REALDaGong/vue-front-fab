@@ -60,7 +60,6 @@
                         <el-button>取消</el-button>
                       </el-form-item>
                     </el-form>
-                  </el-tab-pane>
                 </el-tabs>
               </template>
             </el-card>
