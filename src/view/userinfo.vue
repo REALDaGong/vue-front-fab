@@ -29,7 +29,6 @@
             <el-card class="box-card2">
               <template>
                 <el-tabs  @tab-click="handleClickOnUserinfoPage">
-                  <el-tab-pane label="基本信息" name="first">
                     <el-form label-position="right" label-width="80px" :model="userinfo">
                       <el-form-item label="用户名">
                         <el-input v-model="userinfo.name" disabled="true"></el-input>
@@ -60,7 +59,6 @@
                         <el-button>取消</el-button>
                       </el-form-item>
                     </el-form>
-                  </el-tab-pane>
                 </el-tabs>
               </template>
             </el-card>
