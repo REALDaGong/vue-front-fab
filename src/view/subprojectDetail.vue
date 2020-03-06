@@ -139,7 +139,7 @@
             </el-tab-pane>
             <el-tab-pane label="成员列表" name="fourth" @tab-click="getMember">
               <el-carousel :interval="4000" type="card" height="300px">
-                <el-carousel-item v-for="(mem,i) in memberInfo">
+                <el-carousel-item v-for="(mem,i) in memberInfo" :key="i">
                   <div>
                     <h3 class="medium"
                         style="text-align:center;font-size: 16px;opacity: 0.99;line-height: 50px;margin: 0;">

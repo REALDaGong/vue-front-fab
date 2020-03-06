@@ -96,7 +96,13 @@ export default {
           }
         )
         .catch(
-          res => console.log(res.response)
+          res => {
+            console.log(res)
+            this.$message({
+              type: 'error',
+              message: '用户名或密码错误'
+            })
+          }
         )
     }
   }

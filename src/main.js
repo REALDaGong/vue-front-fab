@@ -25,7 +25,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
 
-Vue.use(axios, VueAxios)
+Vue.use(VueAxios, axios)
 Vue.use(ElementUI)
 Vue.component('icon', Icon)
 

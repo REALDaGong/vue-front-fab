@@ -5,9 +5,9 @@
         <vheader />
       </el-header>
       <el-container>
-        <el-aside width="200px">
+        <!--<el-aside width="200px">
           <navmenu></navmenu>
-        </el-aside>
+        </el-aside>-->
         <el-main>
           <router-view></router-view>
         </el-main>
@@ -20,6 +20,9 @@ import NavMenu from '@/components/NavMenu'
 import Header from '@/components/Header'
 
 export default {
+  beforeMount () {
+    this.$router.push({path:'/app/ProjectList'}).catch(() =>{})
+  },
   name: 'mainApp',
   components: {
     'navmenu': NavMenu,

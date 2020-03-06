@@ -110,6 +110,27 @@ export default {
         major: '专业',
         stuNumber: this.no
       }
+      if (this.role === 'student'){
+        data = {
+          identity: this.role,
+          name: this.name,
+          password: this.pass,
+          gender: this.gender,
+          university: this.uniname,
+          major: '专业',
+          stuNumber: this.no
+        }
+      } else {
+        data = {
+          identity: this.role,
+          name: this.name,
+          password: this.pass,
+          gender: this.gender,
+          university: this.uniname,
+          major: '专业',
+          teaNumber: '123'
+        }
+      }
       register(data)
         .then(
           res => {

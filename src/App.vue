@@ -10,7 +10,7 @@ export default {
   name: 'app',
   beforeMount () {
     if(typeof localStorage.name === 'undefined'){
-      this.$router.push({path:'/login'})
+      this.$router.push({path:'/login'}).catch(() =>{})
     }
   },
   mounted () {
