@@ -4,13 +4,14 @@
     <el-row :gutter="24" id="row">
       <el-col :span="6">
         <div id="list">
+          <div id="topic">
           项目列表
-          <el-divider></el-divider>
+          </div>
           <projectlistcontent ref="content" :change="changeRightContent"></projectlistcontent>
         </div>
         <div id="add">
-          <el-button type="success" icon="el-icon-plus" circle @click="dialogFormVisible = true"></el-button>
-          <el-button type="success" icon="el-icon-refresh-left" circle @click="fetchAllProject"></el-button>
+          <el-button type="success" icon="el-icon-plus" circle @click="dialogFormVisible = true" style="box-shadow: 0px 0px 4px #000000"></el-button>
+          <el-button type="success" icon="el-icon-refresh-left" circle @click="fetchAllProject" style="box-shadow: 0px 0px 4px #000000"></el-button>
           <el-dialog title="新建项目" :visible.sync="dialogFormVisible">
             <el-radio-group v-model="formPage" class="buttons">
               <el-radio-button label="新建"></el-radio-button>
@@ -57,7 +58,7 @@
       </el-col>
       <el-col :span="18">
         <el-main id="content">
-          <el-menu router class="el-menu-demo" mode="horizontal" @select="handleSelect" @open="handleOpen" @close="handleClose">
+          <el-menu router default-active="/app/projectlist/projectSub" class="el-menu-demo" mode="horizontal" @select="handleSelect" @open="handleOpen" @close="handleClose">
             <el-menu-item index="/app/projectlist/projectSub">子项目</el-menu-item>
             <el-menu-item index="/app/projectlist/projectMember">成员</el-menu-item>
           </el-menu>
@@ -225,14 +226,14 @@ export default {
   position: relative;
 }
 #list{
-  padding: 0;
+  padding: 30px 10px 10px 10px;
   margin: 0;
   height: 100%;
-  border-right: 1px solid #87888a;
-  box-shadow: 5px 0px 5px -5px black;
+  /*border-right: 1px solid #87888a;
+  box-shadow: 5px 0px 5px -5px black;*/
 }
 #content{
-  padding: 0;
+  padding: 10px;
   margin: 0;
   height: 100%;
   width: 100%;
@@ -258,5 +259,10 @@ export default {
 }
 .buttons{
   margin-bottom: 10px;
+}
+#topic{
+  width: 100%;
+  text-align: center;
+  padding-bottom: 50px;
 }
 </style>

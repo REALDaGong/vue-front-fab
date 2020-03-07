@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Message, Loading } from 'element-ui'
+import store from '@/utils/vueXstore'
 
 // const ConfigBaseURL = 'http://49.235.226.118/fabric/' // 默认路径，这里也可以使用env来判断环境
 const ConfigBaseURL = 'http://localhost:8080/'
@@ -25,18 +26,37 @@ Service.interceptors.request.use(config => {
 })
 */
 // 添加响应拦截器
-Service.interceptors.response.use(response => {
-  // loadingInstance.close()
-  // console.log(response)
-  return response.data
-}, error => {
-  console.log('TCL: error', error)
-  const msg = error.Message !== undefined ? error.Message : ''
-  Message({
-    message: '网络错误' + msg,
-    type: 'error',
-    duration: 3 * 1000
+
+Service.interceptors.request.use(
+  config => {
+      // vuex记录cancelToken
+      config.cancelToken = new axios.CancelToken((cancel) => {
+          store.commit('pushToken', {
+              cancelToken: cancel
+          })
+      })
+      return config
+  },
+  error => {
+      return Promise.reject(error)
   })
-  // loadingInstance.close()
-  return Promise.reject(error)
-})
+
+// http response 拦截器
+Service.interceptors.response.use(
+  response => {
+      return response.data
+  },
+  error => {
+      // console.log(error)
+      if (error.message === '路由跳转取消请求') { // 判断是否为路由跳转取消网络请求
+          console.log('路由跳转取消请求' + error)
+      } else {
+          const msg = error.Message !== undefined ? error.Message : ''
+          Message({
+            message: '网络错误' + msg,
+            type: 'error',
+            duration: 3 * 1000
+          })
+          return Promise.reject(error)
+      }
+    })

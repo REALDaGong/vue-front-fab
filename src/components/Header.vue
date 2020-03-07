@@ -2,9 +2,7 @@
   <el-row type="flex" align="middle">
     <el-col :span="23">欢迎 {{name}}</el-col>
     <el-col :span="1" id="ava">
-      <router-link to="/userinfo">
-      <el-avatar>{{name}}</el-avatar>
-      </router-link>
+      
     </el-col>
   </el-row>
 </template>

@@ -1,4 +1,5 @@
 import {Service} from './service'
+import { deprecate } from 'util'
 
 export function test () {
   return Service({
@@ -149,6 +150,7 @@ export function searchStu (data) {
 }
 
 export function sesrchSIPByproID (data) {
+  console.warn("api sesrchSIPBuproID is deprecared By @dzc")
   return Service({
     url: 'sesrchSIPByproID',
     method: 'post',
@@ -169,4 +171,19 @@ export function fixstuinfo (data) {
     method: 'post',
     data: JSON.stringify(data)
   })
-} 
+}
+export function finishPro (data) {
+  return Service({
+    url: 'finishPro',
+    method: 'post',
+    data: JSON.stringify(data)
+  })
+}
+
+export function sesrchMemByproID (data) {
+  return Service({
+    url: 'sesrchMemByproID',
+    method: 'post',
+    data: JSON.stringify(data)
+  })
+}

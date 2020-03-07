@@ -114,13 +114,14 @@
           major:_major
         };
         fixstuinfo(data).then(function (response) {
-          this.updateuser(response.data.result)
+          this.updateuser(response.result)
         }.bind(this));
       },
       finduserinfo: function (_userName) {
         let data ={userName: localStorage.name};
         searchStu(data).then(function (response) {
-          this.updateuser(response.data.result)
+          console.log(response)
+          this.updateuser(response.result)
         }.bind(this));
       },
       updateuser: function (data) {

@@ -97,7 +97,7 @@
                     <el-form-item prop="content"  label="评论内容" :label-width="formLabelWidth">
                       <el-input v-model="form.content" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item required="true" label="对该子项目打分" :label-width="formLabelWidth">
+                    <el-form-item :required="true" label="对该子项目打分" :label-width="formLabelWidth">
                       <div class="block">
                         <span class="demonstration"></span>
                         <el-rate
@@ -112,7 +112,7 @@
                   </div>
                 </el-dialog>
                 <div class="container">
-                  <div class="comment" v-for="(comment,i) in sub.Value.comment">
+                  <div class="comment" v-for="(comment,i) in sub.Value.comment" :key="i">
                     <div class="info">
                       <el-avatar class="avatar" width="36" height="36">{{comment.userName}}</el-avatar>
                       <div class="right">
@@ -151,15 +151,7 @@
               <el-button type="primary" v-if="this.identity==='student'" @click="joinSub">加入该子项目</el-button>
               <el-button type="danger" v-if="this.identity==='student'" @click="quitSub">退出该子项目</el-button>
               <el-button type="primary" v-if="this.identity==='teacher'" @click="scoreSub">为子项目打分</el-button>
-              <el-dialog>
-                <el-form-item label="请为该子项目打分" :label-width="formLabelWidth">
-                </el-form-item>
-                <el-form-item label="分数" :label-width="formLabelWidth">
-                  <el-input-number size="small" v-model="score"></el-input-number>
-                </el-form-item>
-                <el-button @click="scoreFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="startScore">确 定</el-button>
-              </el-dialog>
+              
             </el-tab-pane>
           </el-tabs>
         </el-col>
@@ -167,7 +159,7 @@
           <p></p>
         </el-col>
         <el-col :span="6">
-          <div class="timeline" v-for="(sub,i) in subHistory">
+          <div class="timeline" v-for="(sub,i) in subHistory" :key="i">
             <el-timeline>
               <el-timeline-item :timestamp="sub.Timestamp.split(' ')[0]" placement="top">
                 <el-card>
@@ -209,12 +201,12 @@
         scoreFormVisible: false,
         form: {
           content: "",
-          score: {}
+          score: 0
         },
         formLabelWidth: '120px',
         memberInfo: [],
         scoreBuffer: {},
-        score: '0'
+        score: 0
       }
     },
     beforeMount() {
@@ -235,12 +227,14 @@
     },
     methods: {
       getMember: function () {
+        console.log('enter')
         var i = 0;
         this.memberInfo.length = 0;
         for (i = 0; i < this.sub.Value.member.length; i++) {
           var name = {
             userName: this.sub.Value.member[i]
           }
+          console.log(name)
           searchStu(name)
             .then(
               res => {
@@ -307,7 +301,7 @@
         this.scoreFormVisible = true
       },
       startScore : function () {
-        this.scoreBuffer.score = this.score
+        this.scoreBuffer.score = this.score.toString()
         score(scoreBuffer)
         .then(res => {
           if (res.result.status === 'right') {
@@ -378,6 +372,7 @@
       },
       bindTwoButton() {
         $(".file").click();
+        alert("请点击上传！");
       },
       download: function (file, name, time) {
         window.open("http://localhost:8080/downloadAppendixForSub?subproID=" + this.subproID + "&upUser=" + name + "&upTime=" + time + "&fileName=" + file)

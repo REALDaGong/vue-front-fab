@@ -1,14 +1,23 @@
 <template>
   <div class="container">
-    <div class="card-wrap" v-for="(o,index) in List" :key="o.name" v-on:click="open(index)">
+    <div class="card-wrap" v-for="(o,index) in List" :key="index" v-on:click="open(index)">
       <el-card class="card">
-        {{o.name}}
+        <div slot="header" class="clearfix">
+          <span>{{o.name}}</span>
+          <el-button v-if="canDelete(index)" style="float: right; padding: 3px 0" type="text" @click="deleteSub(index,$event)">删除</el-button>
+        </div>
+        <div class="center">
+          {{o.memberNum}}名成员
+        </div>
       </el-card>
     </div>
     <div class="card-wrap">
       <el-card class="new card" v-on:click.native="dialogFormVisible=true">
         <i class="el-icon-circle-plus-outline" style="font-size: 40px;"></i>
       </el-card>
+    </div>
+    <div class="center notify">
+      点击卡片进入详情页面
     </div>
     <el-dialog title="新建子项目" :visible.sync="dialogFormVisible">
       <el-form :model="form">
@@ -20,14 +29,15 @@
             :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="项目描述">
+        <el-form-item label="子项目名称">
+          <el-input type="text" v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="子项目描述">
           <el-input type="textarea" v-model="form.desc"></el-input>
         </el-form-item>
-        <el-radio-group v-model="form.diff">
-          <el-radio-button label="容易"></el-radio-button>
-          <el-radio-button label="一般"></el-radio-button>
-          <el-radio-button label="困难"></el-radio-button>
-        </el-radio-group>
+        <el-form-item label="难度评级">
+          <el-input-number size="small" v-model="form.diff" :min=1 :max=10></el-input-number>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -41,9 +51,12 @@
 </template>
 
 <script>
-import {querySubOfPro, createSubproject, joinSubproject} from '@/router/request'
+import {querySubOfPro, createSubproject, joinSubproject, deleteSubproject} from '@/router/request'
 import {formatDate} from '@/utils/dateFormatter'
 export default {
+  beforeMount () {
+    this.refresh()
+  },
   data () {
     return{
       pickerOptions: {
@@ -74,42 +87,44 @@ export default {
       size: 1,
       List: [],
       dialogFormVisible: false,
+      willDelete: -1,
       form: {
         desc: '',
         date: new Date(),
-        diff: '容易'
+        diff: '1',
+        name: ''
       }
     }
   },
   methods: {
-    getSubs () {
-      querySubOfPro({proID: this.proID})
-      .then(res => {
-        console.log(res)
-      })
-      .catch(res => {
-        console.log(res.Response)
-      })
-    },
-    insertNewCard (dataChunk) {
-      
+    canDelete (index) {
+      if (1===1) {
+        return true
+      } else {
+        return false
+      }
     },
     newSubProject () {
       // start and join myself.
       createSubproject({
         proID: this.proID,
         endTime: formatDate(this.form.date),
-        difficulty: this.form.diff,
-        info: this.form.desc
+        difficulty: this.form.diff.toString(),
+        info: this.form.desc,
+        userName: localStorage.name,
+        subproName: this.form.name
       })
       .then(res => {
-        console.log(res)
         joinSubproject({
           subproID: res.subproID,
           stuName: localStorage.name
         })
         .then(res => {
-          console.log(res)
+          this.$message({
+            type: 'success',
+            message: '创建成功'
+          })
+          setTimeout(function(){this.refresh()}.bind(this),6000)
         })
         .catch(res => {
           console.log(res)
@@ -120,24 +135,24 @@ export default {
         console.log("nope")
         this.dialogFormVisible=false;
       })
-      this.refresh()
     },
     open (index) {
       this.$router.push({path:'/subprojectDetail?id=' + this.List[index].id})
     },
     refresh () {
+      console.log("id"+this.proID)
+      if(this.proID !== -1){
       this.List = []
       querySubOfPro({proID: this.proID})
       .then(res => {
         console.log(res)
-
         res.result.forEach(element => {
           this.List.push(
             {
               raw: element.Record,
               id: element.Key,
               name: element.Record.info,
-              memberNum: element.Record.member 
+              memberNum: element.Record.member.length 
             }
           )
         })
@@ -146,7 +161,40 @@ export default {
       .catch(res => {
         console.log(res)
       })
-    
+      } else {
+        this.List=[]
+      }
+    },
+    deleteSub (index,e) {
+      e.stopPropagation();
+      this.willDelete=index;
+      this.$confirm('删除这个子项目, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+      })
+      .then(() => {
+        deleteSubproject({subproID: this.List[index].id})
+        .then(() => {
+          this.$message({
+          type: 'success',
+          message: '删除成功!'
+          })
+          setTimeout(function(){this.refresh()}.bind(this),6000)
+        })
+        .catch(() => {
+          this.$message({
+          type: 'error',
+          message: '网络错误'
+          })
+        })
+      })
+      .catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消退出'
+        })
+      })
     }
   },
   watch: {
@@ -192,5 +240,15 @@ export default {
 }
 .no-click{
   pointer-events: none;
+}
+.center{
+  text-align: center;
+}
+.notify{
+  padding: 100px;
+  width: 100%;
+  color: #c2c2c2;
+  font-size: 14px;
+  
 }
 </style>

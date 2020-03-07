@@ -13,6 +13,8 @@ import UserInfo from '@/view/userinfo.vue'
 import mainApp from '@/main.vue'
 import error from '@/view/404.vue'
 
+import store from '@/utils/vueXstore'
+
 Vue.use(Router)
 
 var routes = []
@@ -72,4 +74,12 @@ menus.forEach((item) => {
   }
 })
 
-export default new Router({routes})
+const router = new Router({routes})
+
+router.beforeEach((to, from, next) => {
+  store.commit('clearToken')// 取消请求
+  next();
+})
+
+// export default new Router({routes})
+export default router
