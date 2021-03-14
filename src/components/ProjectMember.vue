@@ -43,7 +43,8 @@
       </el-table-column>
       <el-table-column
         fixed="right"
-        label="操作">
+        label="操作"
+        v-if="canScore">
         <template slot-scope="scope">
           <el-button @click="click(scope.$index)" type="text" size="small">删除</el-button>
           <el-button v-if="canScore" @click="prepareScore(scope.$index)" type="text" size="small">打分</el-button>

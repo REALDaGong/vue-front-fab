@@ -9,14 +9,6 @@
           <div class="reg100-wrap">
             <div class="reg100-wrap-block">
               <div class="wrap-input100 validate-input">
-                <input class="input100" type="text" v-model="email" placeholder="邮箱">
-                <span class="focus-input100"></span>
-                <span class="symbol-input100">
-                  <i class="fa fa-envelope" aria-hidden="true"></i>
-                </span>
-              </div>
-
-              <div class="wrap-input100 validate-input">
                 <input class="input100" type="text" v-model="name" placeholder="昵称">
                 <span class="focus-input100"></span>
                 <span class="symbol-input100">
@@ -44,6 +36,13 @@
             <div class="reg100-wrap-block">
               <div class="wrap-input100 validate-input">
                 <input class="input100" type="text" v-model="uniname" placeholder="学校名">
+                <span class="focus-input100"></span>
+                <span class="symbol-input100">
+                  <i class="fa fa-envelope" aria-hidden="true"></i>
+                </span>
+              </div>
+               <div class="wrap-input100 validate-input">
+                <input class="input100" type="text" v-model="major" placeholder="专业">
                 <span class="focus-input100"></span>
                 <span class="symbol-input100">
                   <i class="fa fa-envelope" aria-hidden="true"></i>
@@ -107,7 +106,7 @@ export default {
         password: this.pass,
         gender: this.gender,
         university: this.uniname,
-        major: '专业',
+        major: this.major,
         stuNumber: this.no
       }
       if (this.role === 'student'){
@@ -117,7 +116,7 @@ export default {
           password: this.pass,
           gender: this.gender,
           university: this.uniname,
-          major: '专业',
+          major: this.major,
           stuNumber: this.no
         }
       } else {
@@ -127,7 +126,7 @@ export default {
           password: this.pass,
           gender: this.gender,
           university: this.uniname,
-          major: '专业',
+          major: this.major,
           teaNumber: '123'
         }
       }
@@ -135,7 +134,19 @@ export default {
         .then(
           res => {
             console.log(res)
+            if(res.details !=='注册成功'){
+              this.$message({
+              type: 'error',
+              message: res.details
+              })
+            }else{
             this.$router.push({path:'/login'})
+            this.$message({
+              type: 'success',
+              message: '注册成功!'
+              
+              })
+          }
           }
         )
         .catch(
