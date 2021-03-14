@@ -227,6 +227,7 @@ export default {
     changeRightContent (proID) {
       this.selectedProID = proID
       localStorage.selectedProID = proID // bad action...
+      console.log("good")
       // this.$refs.sub.refresh(proID)
     },
     getCurrentProID () {

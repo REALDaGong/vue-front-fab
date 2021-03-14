@@ -32,7 +32,8 @@ import {searchSIPByStu,searchProByTeacher, quitProject, finishPro} from "@/route
 export default {
   data () {
     return {
-      ListData: []
+      ListData: [],
+      sip: []
     }
   },
   mounted () {
@@ -44,8 +45,10 @@ export default {
 
       if (obj.command === 'end'){
         this.finish(obj.ind)
-      }else{
+      }else if(obj.command === 'quit'){
         this.quit(obj.ind)
+      }else if(obj.command === 'info'){
+        this.info(obj.ind)
       }
     },
     refresh () {
@@ -71,13 +74,20 @@ export default {
             })
           }
         })
+        res.Sip.forEach(element => {
+          if(element != null){
+            this.sip.push({
+              id: element.Record.sip_id
+            })
+          }
+        })
       })
     },
     open (index) {
       if(index !== -1){
         this.change(this.ListData[index].id)
       }else{
-        this.change(-1)
+        this.change(null)
       }
     },
     finish (index) {
@@ -118,7 +128,11 @@ export default {
         });
     },
     info(index){
-
+      this.$alert(this.ListData[index].info, '项目详情', {
+          confirmButtonText: '确定',
+          callback: action => {
+          }
+        });
     },
     quit (index) {
       this.$confirm('退出这个项目, 是否继续?', '提示', {
@@ -126,8 +140,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          console.log(this.ListData[index].id)
-          quitProject({SipID: this.ListData[index].id})
+          quitProject({SipID: this.sip[index].id})
           .then(res => {
             if (res.status !=='wrong') {
               console.log(res)

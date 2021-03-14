@@ -107,7 +107,7 @@ export default {
       }
     },
     showSubProjectHint (){
-      if(typeof localStorage.selectedProID === 'undefined'){
+      if(typeof localStorage.selectedProID === 'undefined' || localStorage.selectedProID === 'null'){
         return "请选择项目";
       }else{
         return "点击卡片进入详情页面";
@@ -150,7 +150,11 @@ export default {
     },
     refresh () {
       console.log("id"+this.proID)
+      this.newSubVisible = false;
       if(this.proID){
+        if(this.proID === 'null'){
+          return;
+        }
       this.newSubVisible = true;
       this.List = []
       querySubOfPro({proID: this.proID})
