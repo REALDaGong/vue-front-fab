@@ -6,7 +6,7 @@
       class="el-menu-vertical-demo"
       @open=""
       @close="">
-      <el-menu-item v-for="(o,index) in ListData" :key="o.id" :index="index" style="width: 100%">
+      <el-menu-item v-for="(o,index) in ListData" :key="o.id" :index="index" style="width: 100%" v-on:click.native="open(index)">
         <div class = "pro-container">
           <span id="id">{{o.name}}</span>
           <el-dropdown @command="handleCommand" >
@@ -116,6 +116,9 @@ export default {
             message: '已取消'
           });
         });
+    },
+    info(index){
+
     },
     quit (index) {
       this.$confirm('退出这个项目, 是否继续?', '提示', {
