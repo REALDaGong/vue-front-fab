@@ -1,21 +1,27 @@
 <!--项目列表的主控件的列表部分-->
 <template>
   <div id="main-container">
-    <el-card v-for="(o,index) in ListData" :key="o.id" class="box-card" shadow="hover" v-on:click.native="open(index)">
-      <div>
-        <span id="id">{{o.name}}</span>
-        <el-dropdown @command="handleCommand" style="float: right; padding: 3px 0">
+    <el-menu
+      default-active="2"
+      class="el-menu-vertical-demo"
+      @open=""
+      @close="">
+      <el-menu-item v-for="(o,index) in ListData" :key="o.id" :index="index" style="width: 100%">
+        <div class = "pro-container">
+          <span id="id">{{o.name}}</span>
+          <el-dropdown @command="handleCommand" >
           <span class="el-dropdown-link">
-            操作<i class="el-icon-arrow-down el-icon--right"></i>
+            <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item :command="{command:'end',ind:index}">结束项目</el-dropdown-item>
-            <el-dropdown-item :command="{command:'quit',ind:index}">退出项目</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        
-      </div>
-    </el-card>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item :command="{command:'info',ind:index}">项目详情</el-dropdown-item>
+              <el-dropdown-item :command="{command:'end',ind:index}">结束项目</el-dropdown-item>
+              <el-dropdown-item :command="{command:'quit',ind:index}">退出项目</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </el-menu-item>
+    </el-menu>
     <el-dialog>
     </el-dialog>
   </div>
@@ -35,7 +41,7 @@ export default {
   methods: {
     handleCommand (obj) {
       console.log(obj)
-      
+
       if (obj.command === 'end'){
         this.finish(obj.ind)
       }else{
@@ -43,7 +49,7 @@ export default {
       }
     },
     refresh () {
-      
+
       (localStorage.identity == 'teacher'?
       searchProByTeacher({
         teacherName: localStorage.name
@@ -89,7 +95,7 @@ export default {
               this.$message({
               type: 'success',
               message: '结束成功!'
-              
+
               })
               this.open(-1)
             } else {
@@ -109,7 +115,7 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消'
-          });          
+          });
         });
     },
     quit (index) {
@@ -145,9 +151,9 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消退出'
-          });          
+          });
         });
-    } 
+    }
   },
   props: {
     change: {
@@ -188,5 +194,11 @@ export default {
 .no-pointer{
   pointer-events: none;
 }
-
+  .pro-container{
+    display: flex;
+  }
+  .pro-container .el-dropdown{
+    flex-grow: 1;
+    text-align: right;
+  }
 </style>
