@@ -12,12 +12,12 @@
       </el-card>
     </div>
     <div class="card-wrap">
-      <el-card class="new card" v-on:click.native="dialogFormVisible=true">
+      <el-card class="new card" v-on:click.native="dialogFormVisible=true" v-if="newSubVisible">
         <i class="el-icon-circle-plus-outline" style="font-size: 40px;"></i>
       </el-card>
     </div>
     <div class="center notify">
-      点击卡片进入详情页面
+      {{showSubProjectHint()}}
     </div>
     <el-dialog title="新建子项目" :visible.sync="dialogFormVisible">
       <el-form :model="form">
@@ -56,6 +56,7 @@ import {formatDate} from '@/utils/dateFormatter'
 export default {
   beforeMount () {
     this.refresh()
+    console.log("breforemount");
   },
   data () {
     return{
@@ -87,6 +88,7 @@ export default {
       size: 1,
       List: [],
       dialogFormVisible: false,
+      newSubVisible: false,
       willDelete: -1,
       form: {
         desc: '',
@@ -102,6 +104,13 @@ export default {
         return true
       } else {
         return false
+      }
+    },
+    showSubProjectHint (){
+      if(typeof localStorage.selectedProID === 'undefined'){
+        return "请选择项目";
+      }else{
+        return "点击卡片进入详情页面";
       }
     },
     newSubProject () {
@@ -141,7 +150,8 @@ export default {
     },
     refresh () {
       console.log("id"+this.proID)
-      if(this.proID !== -1){
+      if(this.proID){
+      this.newSubVisible = true;
       this.List = []
       querySubOfPro({proID: this.proID})
       .then(res => {

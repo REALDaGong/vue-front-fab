@@ -54,8 +54,7 @@ export default {
       .then(res => {
         console.log(res)
         this.ListData = []
-        var reciever = res.proInfo ? res.proInfo: res.result;
-        reciever.forEach(element => {
+        res.proInfo.forEach(element => {
           if (element != null){
             this.ListData.push({
               id: element.project_id,
