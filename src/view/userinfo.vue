@@ -34,7 +34,7 @@
                       <el-form-item label="用户名">
                         <el-input v-model="userinfo.name" :disabled="true"></el-input>
                       </el-form-item>
-                      <el-form-item label="学生ID">
+                      <el-form-item label="ID">
                         <el-input id="stunuminput" v-model="userinfo.stuNumber"></el-input>
                       </el-form-item>
                       <el-form-item label="大学">
@@ -57,7 +57,7 @@
                       </el-form-item>
                       <el-form-item>
                         <el-button type="primary" @click="onSubmitOnUserinfoPage">立即修改</el-button>
-                        <el-button>取消</el-button>
+                        <el-button @click="back">取消</el-button>
                       </el-form-item>
                     </el-form>
                   </el-tab-pane>
@@ -142,6 +142,9 @@
           })
           .catch(_ => {
           });
+      },
+      back:function () {
+        this.$router.push({path:'/app/ProjectList'}).catch(() =>{})
       }
     }
   }
