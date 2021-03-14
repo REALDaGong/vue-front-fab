@@ -6,8 +6,9 @@
         <el-col :span="3">
           <p></p>
         </el-col>
-        <el-col :span="11">
-          <el-tabs v-model="activeName">
+        <el-col :span="11" style="position: relative">
+          <el-button style="right:0;z-index: 99;position: absolute" @click="goback">返回主页</el-button>
+          <el-tabs v-model="activeName" style="z-index: 10">
             <el-tab-pane label="子项目基本信息" name="first">
               <el-card>
                 <div slot="header" style="text-align: center">
@@ -25,7 +26,7 @@
                 <el-divider content-position="right">截止时间</el-divider>
                 <h4 style="font-size: 16px;font-style:oblique">&nbsp;&nbsp;&nbsp;&nbsp;{{sub.Value.subproEndTime}}</h4>
                 <el-divider content-position="right">当前版本</el-divider>
-                <h4 style="font-size: 16px;font-style:oblique">&nbsp;&nbsp;&nbsp;&nbsp;{{sub.Timestamp.split(".")[0]}}</h4>
+                <h4 style="font-size: 16px;font-style:oblique">&nbsp;&nbsp;&nbsp;&nbsp;{{new Date(new Date(sub.Timestamp.split(".")[0]).getTime()+3600000*8).toString().split('G')[0]}}</h4>
                 <p></p>
               </el-card>
             </el-tab-pane>
@@ -151,7 +152,6 @@
               <el-button type="primary" v-if="this.identity==='student'" @click="joinSub">加入该子项目</el-button>
               <el-button type="danger" v-if="this.identity==='student'" @click="quitSub">退出该子项目</el-button>
               <el-button type="primary" v-if="this.identity==='teacher'" @click="scoreSub">为子项目打分</el-button>
-              
             </el-tab-pane>
           </el-tabs>
         </el-col>
@@ -164,7 +164,7 @@
               <el-timeline-item :timestamp="sub.Timestamp.split(' ')[0]" placement="top">
                 <el-card>
                   <h4>{{sub.Value.info}}</h4>
-                  <p> 提交于{{sub.Timestamp.split(".")[0]}}</p>
+                  <p> 提交于{{new Date(new Date(sub.Timestamp.split(".")[0]).getTime()+3600000*8).toString().split('G')[0].split('2021')[1]}}</p>
                   <el-button icon="el-icon-right" @click="getSub(i)" circle>前往该版本</el-button>
                 </el-card>
               </el-timeline-item>
@@ -226,8 +226,10 @@
         )
     },
     methods: {
+      goback:function(){
+        this.$router.push({path:'/app/ProjectList'}).catch(() =>{});
+      },
       getMember: function () {
-        console.log('enter')
         var i = 0;
         this.memberInfo.length = 0;
         for (i = 0; i < this.sub.Value.member.length; i++) {

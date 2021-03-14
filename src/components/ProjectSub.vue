@@ -47,7 +47,7 @@
     <div class="footer">
     </div>
   </div>
-  
+
 </template>
 
 <script>
@@ -146,7 +146,8 @@ export default {
       })
     },
     open (index) {
-      this.$router.push({path:'/subprojectDetail?id=' + this.List[index].id})
+      this.$router.push({path:'/subprojectDetail?id=' + this.List[index].id});
+      location.reload();
     },
     refresh () {
       console.log("id"+this.proID)
@@ -166,7 +167,7 @@ export default {
               raw: element.Record,
               id: element.Key,
               name: element.Record.info,
-              memberNum: element.Record.member.length 
+              memberNum: element.Record.member.length
             }
           )
         })
@@ -263,6 +264,6 @@ export default {
   width: 100%;
   color: #c2c2c2;
   font-size: 14px;
-  
+
 }
 </style>
