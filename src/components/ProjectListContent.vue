@@ -1,6 +1,7 @@
 <!--项目列表的主控件的列表部分-->
 <template>
   <div id="main-container">
+    
     <el-menu
       default-active="2"
       class="el-menu-vertical-demo"
@@ -17,14 +18,41 @@
               <el-dropdown-item :command="{command:'info',ind:index}">项目详情</el-dropdown-item>
               <el-dropdown-item :command="{command:'end',ind:index}">结束项目</el-dropdown-item>
               <el-dropdown-item :command="{command:'quit',ind:index}">退出项目</el-dropdown-item>
+              
             </el-dropdown-menu>
           </el-dropdown>
         </div>
       </el-menu-item>
     </el-menu>
-    <el-dialog>
+    <el-dialog
+      :title="this.ListData[this.curProj].name + '  项目详情'"
+      :visible.sync="dialogVisible"
+      width="30%">
+      <div>
+        <span>项目ID:{{this.ListData[curProj].id}}</span>
+      </div>
+      <div>
+        <span>项目介绍:{{this.ListData[curProj].info}}</span>
+      </div>
+      <div>
+        <span>项目开始时间:{{this.ListData[curProj].start_time}}</span>
+      </div>
+      <div>
+        <span>项目结束时间:{{this.ListData[curProj].end_time}}</span>
+      </div>
+      <div>
+        <span>项目负责人:{{this.ListData[curProj].teacher_name}}</span>
+      </div>
+      <div>
+        <span>项目创建人:{{this.ListData[curProj].leader_name}}</span>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
+  
 </template>
 
 <script>
@@ -33,7 +61,9 @@ export default {
   data () {
     return {
       ListData: [],
-      sip: []
+      sip: [],
+      dialogVisible: false,
+      curProj: 0
     }
   },
   mounted () {
@@ -70,10 +100,15 @@ export default {
               name: element.project_name,
               info: element.pro_info,
               final_score: element.final_score,
-              relative_score: element.relative_score
+              relative_score: element.relative_score,
+              end_time: element.pro_end_time,
+              start_time: element.pro_start_time,
+              teacher_name: element.pro_teacher_name,
+              leader_name: element.pro_leader_name
             })
           }
         })
+        if(res.Sip)
         res.Sip.forEach(element => {
           if(element != null){
             this.sip.push({
@@ -128,11 +163,8 @@ export default {
         });
     },
     info(index){
-      this.$alert(this.ListData[index].info, '项目详情', {
-          confirmButtonText: '确定',
-          callback: action => {
-          }
-        });
+      this.dialogVisible = true;
+      this.curProj = index
     },
     quit (index) {
       this.$confirm('退出这个项目, 是否继续?', '提示', {
@@ -140,7 +172,9 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          quitProject({SipID: this.sip[index].id})
+          (localStorage.identity === 'teacher' ?
+          quitProject({SipID: this.sip[index].id}):
+          teacherQuitPro({proID: this.ListData[index].id, teacherName: localStorage.name}))
           .then(res => {
             if (res.status !=='wrong') {
               console.log(res)

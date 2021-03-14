@@ -124,6 +124,14 @@ export function quitProject (data) {
   })
 }
 
+export function teacherQuitPro (data) {
+  return Service({
+    url: 'teacherQuitPro',
+    method: 'post',
+    data: JSON.stringify(data)
+  })
+}
+
 export function addProMember (data) {
   return Service({
     url: 'AddProMember',

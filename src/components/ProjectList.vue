@@ -12,7 +12,8 @@
         <div id="add">
           <el-button type="success" icon="el-icon-plus" circle @click="dialogFormVisible = true" style="box-shadow: 0px 0px 4px #000000"></el-button>
           <el-button type="success" icon="el-icon-refresh-left" circle @click="fetchAllProject" style="box-shadow: 0px 0px 4px #000000"></el-button>
-          <el-dialog title="新建项目" :visible.sync="dialogFormVisible">
+          <el-dialog :title= 'formTitle' :visible.sync="dialogFormVisible">
+            
             <el-radio-group v-model="formPage" class="buttons">
               <el-radio-button label="新建"></el-radio-button>
               <el-radio-button label="加入"></el-radio-button>
@@ -22,7 +23,7 @@
                 <el-input v-model="form.name" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item label="负责人名称" :label-width="formLabelWidth">
-                <el-input v-model="form.Tname" autocomplete="off"></el-input>
+                <el-input v-model="form.Tname" autocomplete="off" :disabled = "this.isTeacher"></el-input>
               </el-form-item>
               <el-form-item label="结束时间" :label-width="formLabelWidth">
                 <el-date-picker
@@ -103,6 +104,7 @@ export default {
         }]
       },
       dialogFormVisible: false,
+      formTitle: "新建项目",
       form: {
         name: '',
         Tname: '',
@@ -118,14 +120,19 @@ export default {
       formPage: '新建',
       isNewClosed: false,
       isJoinClosed: true,
-      selectedProID: ''
+      selectedProID: '',
+      isTeacher: false
     }
+  },
+  beforeMount() {
+    this.isTeacher = localStorage.identity == 'teacher' ? (this.form.Tname = localStorage.name,true) : false
   },
   components: {
     'projectlistcontent': ProjectListContent
   },
   created: function () {
     this.debouncedGetQuery = this._.debounce(this.getQuery, 500)
+    
   },
   watch: {
     searchName: function (newInput, oldInput) {
@@ -134,9 +141,11 @@ export default {
     },
     formPage: function () {
       if(this.formPage === '新建'){
+        this.formTitle = "新建项目"
         this.isNewClosed = false
         this.isJoinClosed = true
       }else{
+        this.formTitle = "加入项目"
         this.isNewClosed = true
         this.isJoinClosed = false
       }
@@ -166,25 +175,29 @@ export default {
           console.log(res.response)
         })
     },
+    getTitle(){
+      
+    },
     confirmMultex () {
       if (this.isJoinClosed == false){
         (localStorage.identity == 'teacher' ?
-        teacherJoinPro({proID: this.form.ProID,teacherName: localStorage.name}):
-        addProMember({proID: this.form.ProID,stuName: localStorage.name}))
+        teacherJoinPro({proID: this.form.proID,teacherName: localStorage.name}):
+        addProMember({proID: this.form.proID,stuName: localStorage.name}))
         
         //addProMember({proID: this.form.ProID,stuName: localStorage.name})
             .then(res => {
               console.log(res);
-              if(res.response.status == 'wrong'){
+              if(res.status === 'wrong'){
+                this.$message({
+                  type: 'error',
+                  message: res.details
+                });
+              }else{
                 this.$message({
                   type: 'success',
-                  message: '未找到该id'
+                  message: res.details
                 });
               }
-              this.$message({
-                type: 'success',
-                message: '加入成功'
-              });
             this.dialogFormVisible = false
             })
             .catch(res => {
@@ -206,13 +219,15 @@ export default {
         createProject(data)
           .then(res => {
             console.log(res)
-            addProMember({proID: res.ProID,stuName: localStorage.name})
-            .then(res => {
-              console.log(res)
-            })
-            .catch(res => {
-              console.log(res.response)
-            })
+            if(localStorage.identity === 'student'){
+              addProMember({proID: res.ProID,stuName: localStorage.name})
+              .then(res => {
+                console.log(res)
+              })
+              .catch(res => {
+                console.log(res.response)
+              })
+            }
             this.dialogFormVisible = false
           })
           .catch(res => {
