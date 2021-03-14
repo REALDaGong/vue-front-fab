@@ -49,9 +49,11 @@ import Header from '@/components/Header'
 export default {
   beforeMount () {
     this.$router.push({path:'/app/ProjectList'}).catch(() =>{})
+    this.$router.push({path:'/app/projectlist/projectSub'}).catch(() =>{})
     if(typeof localStorage.name !== 'undefined'){
-      name = localStorage.name
+      this.name = localStorage.name
     }
+    localStorage.removeItem('selectedProID')
   },
   data () {
     return {
