@@ -43,7 +43,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="newProject">确 定</el-button>
+              <el-button type="primary" @click="confirmMultex">确 定</el-button>
             </div>
           </el-dialog>
           <el-dialog title="搜索项目" :visible.sync="searchFormVisible">
@@ -71,7 +71,7 @@
 
 <script>
 import ProjectListContent from '@/components/ProjectListContent'
-import {createProject, addProMember} from '@/router/request'
+import {createProject, addProMember, teacherJoinPro} from '@/router/request'
 import {formatDate} from '@/utils/dateFormatter'
 
 export default {
@@ -166,14 +166,33 @@ export default {
           console.log(res.response)
         })
     },
-    newProject () {
+    confirmMultex () {
       if (this.isJoinClosed == false){
-        addProMember({proID: this.form.ProID,stuName: localStorage.name})
+        (localStorage.identity === 'teacher' ?
+        teacherJoinPro({proID: this.form.ProID,teacherName: localStorage.name}):
+        addProMember({proID: this.form.ProID,stuName: localStorage.name}))
+        
+        //addProMember({proID: this.form.ProID,stuName: localStorage.name})
             .then(res => {
-              console.log(res)
+              console.log(res);
+              if(res.response.status == 'wrong'){
+                this.$message({
+                  type: 'success',
+                  message: '未找到该id'
+                });
+              }
+              this.$message({
+                type: 'success',
+                message: '加入成功'
+              });
+            this.dialogFormVisible = false
             })
             .catch(res => {
-              console.log(res.response)
+              console.log(res.response);
+              this.$message({
+              type: 'error',
+              message: '未找到该id'
+            });
             })
       } else {
       var data = {

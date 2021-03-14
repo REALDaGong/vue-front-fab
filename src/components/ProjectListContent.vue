@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import {searchSIPByStu, quitProject, finishPro} from "@/router/request"
+import {searchSIPByStu,searchProByTeacher, quitProject, finishPro} from "@/router/request"
 export default {
   data () {
     return {
@@ -43,11 +43,14 @@ export default {
       }
     },
     refresh () {
-      var data = {
+      
+      (localStorage.identity === 'teacher'?
+      searchSIPByStu({
         stuName: localStorage.name
-      }
-      console.log(data)
-      searchSIPByStu(data)
+      }):
+      searchProByTeacher({
+        teacherName: localStorage.name
+      }))
       .then(res => {
         console.log(res)
         this.ListData = []

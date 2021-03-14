@@ -52,11 +52,7 @@ Service.interceptors.response.use(
           console.log('路由跳转取消请求' + error)
       } else {
           const msg = error.Message !== undefined ? error.Message : ''
-          Message({
-            message: '网络错误' + msg,
-            type: 'error',
-            duration: 3 * 1000
-          })
+          
           return Promise.reject(error)
       }
     })

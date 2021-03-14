@@ -132,6 +132,22 @@ export function addProMember (data) {
   })
 }
 
+export function teacherJoinPro (data) {
+  return Service({
+    url: 'teacherJoinPro',
+    method: 'post',
+    data: JSON.stringify(data)
+  })
+}
+
+export function searchProByTeacher (data) {
+  return Service({
+    url: 'searchProByTeacher',
+    method: 'post',
+    data: JSON.stringify(data)
+  })
+}
+
 // sesrch?
 export function searchProinfo (data) {
   return Service({
