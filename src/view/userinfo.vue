@@ -57,7 +57,7 @@
                       </el-form-item>
                       <el-form-item>
                         <el-button type="primary" @click="onSubmitOnUserinfoPage">立即修改</el-button>
-                        <el-button @click="back">取消</el-button>
+                        <el-button @click="back">返回</el-button>
                       </el-form-item>
                     </el-form>
                   </el-tab-pane>
@@ -100,8 +100,7 @@
         let newgender = $("#genderinput").val();
         let newemail = $("#emailinput").val();
         let newmobilePhone = $("#phoneinput").val();
-        this.updateuserinfo("stu1", newStuNum,newUni,newMajor, newgender, newemail, newmobilePhone);
-        this.open1();
+        this.updateuserinfo(localStorage.name, newStuNum,newUni,newMajor, newgender, newemail, newmobilePhone);
       },
       updateuserinfo: function (_username, _stunum,_uni,_major, _gender, _email, _mobilephone) {
         let data = {
@@ -114,7 +113,18 @@
           major:_major
         };
         fixstuinfo(data).then(function (response) {
-          this.updateuser(response.result)
+          if(response.status === 'right'){
+            this.$message({
+              type: 'success',
+              message: response.details
+            });
+          }
+          else{
+            this.$message({
+              type: 'error',
+              message: response.details
+            });
+          }
         }.bind(this));
       },
       finduserinfo: function (_userName) {
