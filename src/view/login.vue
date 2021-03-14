@@ -89,10 +89,17 @@ export default {
         .then(
           res => {
             console.log(res)
-            localStorage.name=this.name
-            localStorage.identity=this.radio === '0' ?'student':'teacher'
-            localStorage.token=tokenGen(localStorage.name,localStorage.identity)
-            this.$router.push({path:'/app'})
+            if(res.status == 'wrong'){
+              this.$message({
+                type: 'error',
+                message: '用户名或密码错误'
+              })
+            }else{
+              localStorage.name=this.name
+              localStorage.identity=this.radio === '0' ?'student':'teacher'
+              localStorage.token=tokenGen(localStorage.name,localStorage.identity)
+              this.$router.push({path:'/app'})
+            }
           }
         )
         .catch(
@@ -100,7 +107,7 @@ export default {
             console.log(res)
             this.$message({
               type: 'error',
-              message: '用户名或密码错误'
+              message: '网络错误'
             })
           }
         )

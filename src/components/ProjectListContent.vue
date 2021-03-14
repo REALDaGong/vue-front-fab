@@ -44,17 +44,18 @@ export default {
     },
     refresh () {
       
-      (localStorage.identity === 'teacher'?
-      searchSIPByStu({
-        stuName: localStorage.name
-      }):
+      (localStorage.identity == 'teacher'?
       searchProByTeacher({
         teacherName: localStorage.name
+      }):
+      searchSIPByStu({
+        stuName: localStorage.name
       }))
       .then(res => {
         console.log(res)
         this.ListData = []
-        res.proInfo.forEach(element => {
+        var reciever = res.proInfo ? res.proInfo: res.result;
+        reciever.forEach(element => {
           if (element != null){
             this.ListData.push({
               id: element.project_id,

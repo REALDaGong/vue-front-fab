@@ -168,7 +168,7 @@ export default {
     },
     confirmMultex () {
       if (this.isJoinClosed == false){
-        (localStorage.identity === 'teacher' ?
+        (localStorage.identity == 'teacher' ?
         teacherJoinPro({proID: this.form.ProID,teacherName: localStorage.name}):
         addProMember({proID: this.form.ProID,stuName: localStorage.name}))
         
