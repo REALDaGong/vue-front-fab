@@ -204,7 +204,7 @@ export default {
               console.log(res.response);
               this.$message({
               type: 'error',
-              message: '未找到该id'
+              message: '网络错误'
             });
             })
       } else {
@@ -218,15 +218,25 @@ export default {
       }
         createProject(data)
           .then(res => {
-            console.log(res)
-            if(localStorage.identity === 'student'){
-              addProMember({proID: res.ProID,stuName: localStorage.name})
-              .then(res => {
-                console.log(res)
-              })
-              .catch(res => {
-                console.log(res.response)
-              })
+            if(res.status === 'wrong'){
+              this.$message({
+                  type: 'error',
+                  message: res.details
+                });
+            }else{
+              if(localStorage.identity === 'student'){
+                console.log(res);
+                setTimeout(() => {
+                  addProMember({proID: res.ProID,stuName: localStorage.name})
+                  .then(res => {
+                    console.log(res)
+                  })
+                  .catch(res => {
+                    console.log(res.response)
+                  })
+                }, 1500);
+                
+              }
             }
             this.dialogFormVisible = false
           })
@@ -235,6 +245,7 @@ export default {
             this.dialogFormVisible = false
           })
       }
+      this.fetchAllProject();
     },
     fetchAllProject () {
       this.$refs.content.refresh()

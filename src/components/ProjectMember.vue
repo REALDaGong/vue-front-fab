@@ -87,8 +87,9 @@ export default {
   },
   methods: {
     startScore : function () {
-      this.scoreBuffer.score = this.score.toString()
-      score(this.scoreBuffer)
+      this.score=Buffer.score = this.score.toString()
+      console.log({SipID: this.scoreBuffer.SipID, score: this.scoreBuffer.score})
+      score({SipID: this.scoreBuffer.SipID, score: this.scoreBuffer.score})
       .then(res => {
         console.log(res)
         if (res.status === 'right') {
@@ -99,7 +100,7 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: '网络错误'
+            message: res.details
           })
         }
       })
@@ -119,27 +120,25 @@ export default {
       console.log(row)
     },
     refresh () {
-      console.log("projectnumber")
       var templist = []
       if (this.proID!==-1){
         sesrchMemByproID({proID: this.proID})
         .then(res => {
-          console.log(res)
+          //console.log(res)
           var noo = 0
           res.Sip.forEach(
             element => {
               searchStu({userName: element.Record.sip_stu_name})
-              .then(res => {
-                console.log(res)
+              .then(res2 => {
                 templist.push({
                   no: noo,
-                  name: res.result.name,
-                  id: res.result.stuNumber,
-                  uni: res.result.university,
-                  email: res.result.email,
-                  phone: res.result.phone,
-                  sipID: res.result.sip_id,
-                  sip_pro_id: res.result.sip_pro_id,
+                  name: res2.result.name,
+                  id: res2.result.stuNumber,
+                  uni: res2.result.university,
+                  email: res2.result.email,
+                  phone: res2.result.phone,
+                  sipID: element.Record.sip_id,
+                  sip_pro_id: element.Record.sip_pro_id,
                   relative_score: element.Record.relative_score,
                   final_score: element.Record.final_score
                 })
@@ -148,6 +147,7 @@ export default {
             }
           )
           this.tableData=templist
+          console.log(this.tableData)
         })
         .catch(res => {
           console.log(res)

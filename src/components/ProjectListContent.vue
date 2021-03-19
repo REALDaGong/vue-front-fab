@@ -7,7 +7,7 @@
       class="el-menu-vertical-demo"
       @open=""
       @close="">
-      <el-menu-item v-for="(o,index) in ListData" :key="o.id" :index="index" style="width: 100%" v-on:click.native="open(index)">
+      <el-menu-item v-for="(o,index) in ListData" :key="o.id"  style="width: 100%" v-on:click.native="open(index)">
         <div class = "pro-container">
           <span id="id">{{o.name}}</span>
           <el-dropdown @command="handleCommand" >
@@ -25,26 +25,33 @@
       </el-menu-item>
     </el-menu>
     <el-dialog
-      :title="this.ListData[this.curProj].name + '  项目详情'"
+      :title="this.ListData[this.curProj] ? this.ListData[this.curProj].name:'null' + '  项目详情'"
       :visible.sync="dialogVisible"
       width="30%">
-      <div>
-        <span>项目ID:{{this.ListData[curProj].id}}</span>
+      <div class = "detail-wrap">
+        <span class = "detail-name">项目ID</span>
+        <span class = "detail-name">{{this.ListData[this.curProj] ? this.ListData[curProj].id :''}}</span>
+      </div >
+        <el-divider></el-divider>
+      <div class = "detail-wrap">
+        <span class = "detail-name">项目介绍</span>
+        <div class = "detail-text">{{this.ListData[this.curProj] ? this.ListData[curProj].info :''}}<br><br></div>
       </div>
-      <div>
-        <span>项目介绍:{{this.ListData[curProj].info}}</span>
+      <div class = "detail-wrap">
+        <span class = "detail-name">项目开始时间</span>
+        <span class = "detail-name">{{this.ListData[this.curProj] ? this.ListData[curProj].start_time :''}}</span>
       </div>
-      <div>
-        <span>项目开始时间:{{this.ListData[curProj].start_time}}</span>
+      <div class = "detail-wrap">
+        <span class = "detail-name">项目结束时间</span>
+        <span class = "detail-name">{{this.ListData[this.curProj] ? this.ListData[curProj].end_time :''}}</span>
       </div>
-      <div>
-        <span>项目结束时间:{{this.ListData[curProj].end_time}}</span>
+      <div class = "detail-wrap">
+        <span class = "detail-name">项目负责人</span>
+        <span class = "detail-name">{{this.ListData[this.curProj] ? this.ListData[curProj].teacher_name :''}}</span>
       </div>
-      <div>
-        <span>项目负责人:{{this.ListData[curProj].teacher_name}}</span>
-      </div>
-      <div>
-        <span>项目创建人:{{this.ListData[curProj].leader_name}}</span>
+      <div class = "detail-wrap">
+        <span class = "detail-name">项目创建人</span>
+        <span class = "detail-name">{{this.ListData[this.curProj] ? this.ListData[curProj].leader_name  :''}}</span>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -62,7 +69,7 @@ export default {
     return {
       ListData: [],
       sip: [],
-      dialogVisible: false,
+      dialogVisible: true,
       curProj: 0
     }
   },
@@ -249,5 +256,27 @@ export default {
   .pro-container .el-dropdown{
     flex-grow: 1;
     text-align: right;
+  }
+  .detail-name{
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    border-style:solid;
+    border-color:rgb(129, 129, 129);
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 5px;
+    margin-right: 10px;
+  }
+  .detail-wrap{
+    padding: 5px;
+  }
+  .detail-text{
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    border-style:solid;
+    border-color:rgb(129, 129, 129);
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 5px;
+    margin : 15px;
   }
 </style>
