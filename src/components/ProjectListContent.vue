@@ -1,7 +1,7 @@
 <!--项目列表的主控件的列表部分-->
 <template>
   <div id="main-container">
-    
+
     <el-menu
       default-active="2"
       class="el-menu-vertical-demo"
@@ -18,7 +18,7 @@
               <el-dropdown-item :command="{command:'info',ind:index}">项目详情</el-dropdown-item>
               <el-dropdown-item :command="{command:'end',ind:index}">结束项目</el-dropdown-item>
               <el-dropdown-item :command="{command:'quit',ind:index}">退出项目</el-dropdown-item>
-              
+
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -59,7 +59,7 @@
       </span>
     </el-dialog>
   </div>
-  
+
 </template>
 
 <script>
@@ -179,7 +179,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          (localStorage.identity === 'teacher' ?
+          (localStorage.identity === 'student' ?
           quitProject({SipID: this.sip[index].id}):
           teacherQuitPro({proID: this.ListData[index].id, teacherName: localStorage.name}))
           .then(res => {

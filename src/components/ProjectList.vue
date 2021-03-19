@@ -13,7 +13,7 @@
           <el-button type="success" icon="el-icon-plus" circle @click="dialogFormVisible = true" style="box-shadow: 0px 0px 4px #000000"></el-button>
           <el-button type="success" icon="el-icon-refresh-left" circle @click="fetchAllProject" style="box-shadow: 0px 0px 4px #000000"></el-button>
           <el-dialog :title= 'formTitle' :visible.sync="dialogFormVisible">
-            
+
             <el-radio-group v-model="formPage" class="buttons">
               <el-radio-button label="新建"></el-radio-button>
               <el-radio-button label="加入"></el-radio-button>
@@ -132,7 +132,7 @@ export default {
   },
   created: function () {
     this.debouncedGetQuery = this._.debounce(this.getQuery, 500)
-    
+
   },
   watch: {
     searchName: function (newInput, oldInput) {
@@ -176,14 +176,14 @@ export default {
         })
     },
     getTitle(){
-      
+
     },
     confirmMultex () {
       if (this.isJoinClosed == false){
-        (localStorage.identity == 'teacher' ?
+        (localStorage.identity === 'teacher' ?
         teacherJoinPro({proID: this.form.proID,teacherName: localStorage.name}):
         addProMember({proID: this.form.proID,stuName: localStorage.name}))
-        
+
         //addProMember({proID: this.form.ProID,stuName: localStorage.name})
             .then(res => {
               console.log(res);
