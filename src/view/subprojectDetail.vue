@@ -151,7 +151,7 @@
               </el-carousel>
               <el-button type="primary" v-if="this.identity==='student'" @click="joinSub">加入该子项目</el-button>
               <el-button type="danger" v-if="this.identity==='student'" @click="quitSub">退出该子项目</el-button>
-              <el-button type="primary" v-if="this.identity==='teacher'" @click="scoreSub">为子项目打分</el-button>
+              <!--<el-button type="primary" v-if="this.identity==='teacher'" @click="scoreSub">为子项目打分</el-button>-->
             </el-tab-pane>
           </el-tabs>
         </el-col>
@@ -189,12 +189,13 @@
 
   export default {
     name: "subprojectDetail",
+    inject: ['reload'],     // 注入 reload 方法
     data() {
       return {
         subproID: window.location.href.split("?id=")[1],
         subHistory: {},
         sub: {},
-        activeName: 'second',
+        activeName: 'first',
         userName: localStorage.getItem("name"),
         identity: localStorage.getItem("identity"),
         dialogFormVisible: false,
@@ -260,14 +261,24 @@
           stuName: this.userName
         }
         if (this.sub.Value.member.indexOf(data.stuName) != -1) {
-          alert("您已经在该子项目中！")
+          this.$message({
+            type: 'warning',
+            message: '您已经在该此项目中!'
+
+          })
           return false
         }
         joinSubproject(data)
           .then(
             res => {
-              alert("加入子项目成功！");
-              location.reload()
+              this.$message({
+                type: 'success',
+                message: '加入子项目成功!'
+              })
+              var _this=this;
+              window.setTimeout(function () {
+                _this.reload();
+              },2000)
             }
           )
           .catch(
@@ -282,14 +293,23 @@
           stuName: this.userName
         }
         if (this.sub.Value.member.indexOf(data.stuName) == -1) {
-          alert("您不在该子项目中，无法退出！")
+          this.$message({
+            type: 'warning',
+            message: '您不在该子项目中，无法退出！'
+          })
           return false
         }
         quitSubproject(data)
           .then(
             res => {
-              alert("退出子项目成功！");
-              location.reload();
+              this.$message({
+                type: 'success',
+                message: '退出子项目成功！'
+              })
+              var _this=this;
+              window.setTimeout(function () {
+                _this.reload();
+              },2000)
             }
           )
           .catch(
@@ -337,8 +357,14 @@
         addComment(data)
           .then(
             res => {
-              alert("评论成功!")
-              location.reload();
+              this.$message({
+                type: 'success',
+                message: '评论成功！'
+              })
+              var _this=this;
+              window.setTimeout(function () {
+                _this.reload();
+              },2000)
             }
           )
           .catch(
@@ -356,7 +382,10 @@
         //'userfile'是formData这个对象的键名
         if(document.querySelector('#file').files[0]==undefined)
         {
-          alert("您没有选择文件，无法上传！");
+          this.$message({
+            type: 'warning',
+            message: '您没有选择文件，无法上传！'
+          })
           return false
         }
         axios({
@@ -368,18 +397,47 @@
             // 'Access-Control-Allow-Origin': 'http://127.0.0.1:8080'
           }
         }).then((res) => {
-          alert("上传成功！");
-          location.reload();
+          this.$message({
+            type: 'success',
+            message: '上传成功！'
+          })
+          var _this=this;
+          window.setTimeout(function () {
+            _this.reload();
+          },2000)
         }) // 发送请求
       },
       bindTwoButton() {
         $(".file").click();
-        alert("请点击上传！");
+        this.$message({
+          type: 'info',
+          message: '请点击上传!'
+        })
       },
       download: function (file, name, time) {
         window.open("http://localhost:8080/downloadAppendixForSub?subproID=" + this.subproID + "&upUser=" + name + "&upTime=" + time + "&fileName=" + file)
-      }
-    }
+      },
+      refreshInfo:function () {
+        this.sleep(3000);
+        var data = {
+          subproID: window.location.href.split("?id=")[1]
+        }
+        queryHistoryOfSubproject(data)
+          .then(
+            res => {
+              this.subHistory = res.result;
+              this.sub = this.subHistory[this.subHistory.length - 1];
+              this.getMember();
+            }
+          )
+          .catch(
+          )
+      },
+       sleep:function(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
+
+  }
   }
 </script>
 
