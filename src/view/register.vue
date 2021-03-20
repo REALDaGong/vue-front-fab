@@ -25,14 +25,18 @@
               </div>
 
               <div class="wrap-input100 validate-input">
-                <input class="input100" type="password" v-model="passver" required="true" placeholder="确认密码">
+                <input class="input100" type="password" v-model="passver" required="true" placeholder="确认密码" v-on:input="valiPass">
                 <span class="focus-input100"></span>
                 <span class="symbol-input100">
                   <i class="fa fa-lock" aria-hidden="true"></i>
                 </span>
               </div>
             </div>
-
+              <transition name="el-zoom-in-top">
+                <div class="warn" v-show="showPassError">
+                  两次输入的密码不相同
+                </div>
+              </transition>
             <div class="reg100-wrap-block">
               <div class="wrap-input100 validate-input">
                 <input class="input100" type="text" v-model="uniname" required="true" placeholder="学校名">
@@ -95,11 +99,25 @@ export default {
       gender: 'male',
       role: 'student',
       no: '',
-      show: true
+      show: true,
+      showPassError: false
     }
   },
   methods: {
+    valiPass(){
+      if(this.pass != this.passver){
+        this.showPassError = true;
+      }else{
+        this.showPassError = false;
+      }
+    },
     reg () {
+      if(this.pass!= this.passver){return;}
+      if(this.name === "" ||
+         this.pass === "" ||
+         this.uniname === "" ||
+         this.major === "" ||
+         (this.stuNumber === "" && this.role === 'student')){return;}
       var data = {
         identity: this.role,
         name: this.name,
@@ -215,5 +233,12 @@ body {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+}
+.warn{
+  
+  padding: 10px;
+  padding-left: 32px;
+  color:red;
+  font-size: 12px;
 }
 </style>
