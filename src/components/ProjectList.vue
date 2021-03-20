@@ -182,7 +182,7 @@ export default {
       if (this.isJoinClosed == false){
         (localStorage.identity === 'teacher' ?
         teacherJoinPro({proID: this.form.proID,teacherName: localStorage.name}):
-        addProMember({proID: this.form.proID,stuName: localStorage.name}))
+        addProMember({proID: this.form.proID,stuName: localStorage.name,isCheck:1}))
 
         //addProMember({proID: this.form.ProID,stuName: localStorage.name})
             .then(res => {
@@ -227,7 +227,7 @@ export default {
               if(localStorage.identity === 'student'){
                 console.log(res);
                 setTimeout(() => {
-                  addProMember({proID: res.ProID,stuName: localStorage.name})
+                  addProMember({proID: res.ProID,stuName: localStorage.name,isCheck:0})
                   .then(res => {
                     console.log(res)
                   })
