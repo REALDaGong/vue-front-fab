@@ -9,7 +9,7 @@
           <div class="reg100-wrap">
             <div class="reg100-wrap-block">
               <div class="wrap-input100 validate-input">
-                <input class="input100" type="text" v-model="name" placeholder="昵称">
+                <input class="input100" type="text" v-model="name" required="true" placeholder="昵称">
                 <span class="focus-input100"></span>
                 <span class="symbol-input100">
                   <i class="fa fa-envelope" aria-hidden="true"></i>
@@ -17,7 +17,7 @@
               </div>
 
               <div class="wrap-input100 validate-input">
-                <input class="input100" type="password" v-model="pass" placeholder="密码">
+                <input class="input100" type="password" v-model="pass" required="true" placeholder="密码">
                 <span class="focus-input100"></span>
                 <span class="symbol-input100">
                   <i class="fa fa-envelope" aria-hidden="true"></i>
@@ -25,7 +25,7 @@
               </div>
 
               <div class="wrap-input100 validate-input">
-                <input class="input100" type="password" v-model="passver" placeholder="确认密码">
+                <input class="input100" type="password" v-model="passver" required="true" placeholder="确认密码">
                 <span class="focus-input100"></span>
                 <span class="symbol-input100">
                   <i class="fa fa-lock" aria-hidden="true"></i>
@@ -35,14 +35,14 @@
 
             <div class="reg100-wrap-block">
               <div class="wrap-input100 validate-input">
-                <input class="input100" type="text" v-model="uniname" placeholder="学校名">
+                <input class="input100" type="text" v-model="uniname" required="true" placeholder="学校名">
                 <span class="focus-input100"></span>
                 <span class="symbol-input100">
                   <i class="fa fa-envelope" aria-hidden="true"></i>
                 </span>
               </div>
                <div class="wrap-input100 validate-input">
-                <input class="input100" type="text" v-model="major" placeholder="专业">
+                <input class="input100" type="text" v-model="major" required="true" placeholder="专业">
                 <span class="focus-input100"></span>
                 <span class="symbol-input100">
                   <i class="fa fa-envelope" aria-hidden="true"></i>
@@ -60,7 +60,7 @@
               </div>
               <transition name="el-zoom-in-top">
                 <div v-show="show" class="wrap-input100 validate-input">
-                  <input class="input100" type="text" v-model="no" placeholder="学号">
+                  <input class="input100" type="text" v-model="no" placeholder="学号" required="true">
                   <span class="focus-input100"></span>
                   <span class="symbol-input100">
                     <i class="fa fa-envelope" aria-hidden="true"></i>
@@ -144,7 +144,7 @@ export default {
             this.$message({
               type: 'success',
               message: '注册成功!'
-              
+
               })
           }
           }
