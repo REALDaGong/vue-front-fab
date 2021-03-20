@@ -69,7 +69,7 @@ export default {
     return {
       ListData: [],
       sip: [],
-      dialogVisible: true,
+      dialogVisible: false,
       curProj: 0
     }
   },

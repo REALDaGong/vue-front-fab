@@ -9,7 +9,7 @@
       max-height="900">
       <el-table-column
         prop="no"
-        label="#"
+        label="编号"
         width="80">
       </el-table-column>
       <el-table-column
@@ -55,7 +55,7 @@
         <el-form-item label="请为该子项目打分">
         </el-form-item>
         <el-form-item label="分数">
-          <el-input-number size="small" v-model="score"></el-input-number>
+          <el-input-number size="small" v-model="score" controls-position="right"></el-input-number>
         </el-form-item>
         <el-button @click="scoreFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="startScore">确 定</el-button>
@@ -87,7 +87,9 @@ export default {
   },
   methods: {
     startScore : function () {
-      this.score=Buffer.score = this.score.toString()
+      console.log(this.score);
+      this.score= this.scoreBuffer.score = this.score.toString()
+      
       console.log({SipID: this.scoreBuffer.SipID, score: this.scoreBuffer.score})
       score({SipID: this.scoreBuffer.SipID, score: this.scoreBuffer.score})
       .then(res => {
@@ -113,7 +115,7 @@ export default {
       })
     },
     prepareScore(index){
-      this.scoreBuffer = {SipID: this.tableData[index].sipID, score: 0}
+      this.scoreBuffer = {SipID: this.tableData[index].sipID, score: this.score}
       this.scoreFormVisible = true
     },
     click(row){
@@ -124,14 +126,16 @@ export default {
       if (this.proID!==-1){
         sesrchMemByproID({proID: this.proID})
         .then(res => {
-          //console.log(res)
+          console.log(res)
           var noo = 0
           res.Sip.forEach(
             element => {
+              console.log()
               searchStu({userName: element.Record.sip_stu_name})
               .then(res2 => {
+                console.log(res2)
                 templist.push({
-                  no: noo,
+                  no: noo + 1,
                   name: res2.result.name,
                   id: res2.result.stuNumber,
                   uni: res2.result.university,
