@@ -1,6 +1,6 @@
 <template>
   <div id=app>
-    <router-view></router-view>
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 <script>
@@ -13,6 +13,25 @@ export default {
       this.$router.push({path:'/login'}).catch(() =>{})
     }
   },
+  provide (){
+    return {
+      reload:this.reload
+    }
+  },
+  data(){
+    return {
+      isRouterAlive:true
+    }
+  },
+  methods:{
+    reload (){
+      this.isRouterAlive = false
+      this.$nextTick(function(){
+        this.isRouterAlive = true
+      })
+    }
+  },
+
   mounted () {
     // test().then(res => console.log(res)).catch(res => console.log(res))
   }

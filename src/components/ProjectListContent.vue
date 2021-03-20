@@ -28,30 +28,36 @@
       :title="this.ListData[this.curProj] ? this.ListData[this.curProj].name:'null' + '  项目详情'"
       :visible.sync="dialogVisible"
       width="30%">
-      <div class = "detail-wrap">
-        <span class = "detail-name">项目ID</span>
-        <span class = "detail-name">{{this.ListData[this.curProj] ? this.ListData[curProj].id :''}}</span>
+      <div class = "detail-wrap clearfix">
+        
+        <span class = "detail-name copy" style="float:right">{{this.ListData[this.curProj] ? this.ListData[curProj].id :''}}</span>
+        <span class = "detail-name ">项目ID</span>
       </div >
         <el-divider></el-divider>
-      <div class = "detail-wrap">
+      
+      <div class = "detail-wrap clearfix">
+        
+        <span class = "detail-short" style="float:right">{{this.ListData[this.curProj] ? this.ListData[curProj].start_time :''}}</span>
+        <span class = "detail-name">项目开始时间</span>
+      </div>
+      <div class = "detail-wrap  clearfix">
+        
+        <span class = "detail-short" style="float:right">{{this.ListData[this.curProj] ? this.ListData[curProj].end_time :''}}</span>
+        <span class = "detail-name">项目结束时间</span>
+      </div>
+      <div class = "detail-wrap  clearfix">
+        
+        <span class = "detail-short" style="float:right">{{this.ListData[this.curProj] ? this.ListData[curProj].teacher_name :''}}</span>
+        <span class = "detail-name">项目负责人</span>
+      </div>
+      <div class = "detail-wrap  clearfix">
+        
+        <span class = "detail-short" style="float:right">{{this.ListData[this.curProj] ? this.ListData[curProj].leader_name  :''}}</span>
+        <span class = "detail-name">项目创建人</span>
+      </div>
+      <div class = "detail-wrap  clearfix">
         <span class = "detail-name">项目介绍</span>
         <div class = "detail-text">{{this.ListData[this.curProj] ? this.ListData[curProj].info :''}}<br><br></div>
-      </div>
-      <div class = "detail-wrap">
-        <span class = "detail-name">项目开始时间</span>
-        <span class = "detail-name">{{this.ListData[this.curProj] ? this.ListData[curProj].start_time :''}}</span>
-      </div>
-      <div class = "detail-wrap">
-        <span class = "detail-name">项目结束时间</span>
-        <span class = "detail-name">{{this.ListData[this.curProj] ? this.ListData[curProj].end_time :''}}</span>
-      </div>
-      <div class = "detail-wrap">
-        <span class = "detail-name">项目负责人</span>
-        <span class = "detail-name">{{this.ListData[this.curProj] ? this.ListData[curProj].teacher_name :''}}</span>
-      </div>
-      <div class = "detail-wrap">
-        <span class = "detail-name">项目创建人</span>
-        <span class = "detail-name">{{this.ListData[this.curProj] ? this.ListData[curProj].leader_name  :''}}</span>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -278,5 +284,19 @@ export default {
     border-radius: 5px;
     padding: 5px;
     margin : 15px;
+  }
+  .detail-short{
+    padding: 5px;
+    padding-right : 15px;
+  }
+  .clearfix:after{
+    content: "020"; 
+    display: block; 
+    height: 0; 
+    clear: both; 
+    visibility: hidden;  
+  }
+  .copy{
+    cursor:copy;
   }
 </style>
