@@ -12,9 +12,6 @@
                   <div v-model="userinfo" class="username">
                     {{userinfo.name}}
                   </div>
-                  <div v-model="userinfo" class="userid">
-                    ID:{{userinfo.stuNumber}}
-                  </div>
                 </el-col>
               </el-row>
             </el-card>
@@ -33,9 +30,6 @@
                     <el-form label-position="right" label-width="80px" :model="userinfo">
                       <el-form-item label="用户名">
                         <el-input v-model="userinfo.name" :disabled="true"></el-input>
-                      </el-form-item>
-                      <el-form-item label="ID">
-                        <el-input id="stunuminput" v-model="userinfo.stuNumber"></el-input>
                       </el-form-item>
                       <el-form-item label="大学">
                         <el-input id="uniinput" v-model="userinfo.university"></el-input>
@@ -94,7 +88,7 @@
         console.log(tab, event);
       },
       onSubmitOnUserinfoPage: function () {
-        let newStuNum = $("#stunuminput").val();
+        let newStuNum = this.userinfo.stuNumber;
         let newUni = $("#uniinput").val();
         let newMajor = $("#majorinput").val();
         let newgender = $("#genderinput").val();
