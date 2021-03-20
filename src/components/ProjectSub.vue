@@ -56,7 +56,6 @@ import {formatDate} from '@/utils/dateFormatter'
 export default {
   beforeMount () {
     this.refresh()
-    console.log("breforemount");
   },
   data () {
     return{
@@ -166,7 +165,8 @@ export default {
             {
               raw: element.Record,
               id: element.Key,
-              name: element.Record.info,
+              name: element.Record.subproName,
+              info: element.Record.info,
               memberNum: element.Record.member.length
             }
           )
@@ -231,6 +231,7 @@ export default {
   height: 100%;
   width: 100%;
   overflow: auto;
+  
 }
 .card-wrap{
   box-sizing: border-box;

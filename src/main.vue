@@ -15,26 +15,20 @@
           </el-header>
           <router-view class="main"></router-view>
         </el-main>
-        <el-aside width="20px">
+        <el-aside width="0px">
         </el-aside>
-        <el-aside class="side" width="400px" style="border-radius: 25px 0px 0px 0px">
+        <el-aside class="side" width="350px">
           <div class="function">
             <el-button style="float: right; padding: 3px 0; color:white;" type="text" @click="logout">登出</el-button>
-            <!--
-            <el-badge :value="3" class="item">
-              <i class="el-icon-bell" style="font-size: 30px;"></i>
-            </el-badge>
-            -->
           </div>
           <div class="info">
             <router-link to="/userinfo">
-              <el-avatar size="large">{{name}}</el-avatar>
+              <el-avatar :size="150">{{name}}</el-avatar>
             </router-link>
             <div class="name">{{name}}</div>
           </div>
-          <div class="calendar-warp">
-            <el-calendar v-model="date" style="border-radius: 25px 25px 0px 0px;">
-            </el-calendar>
+          <div class="side-footer">
+            关于 | 帮助
           </div>
           
         </el-aside>
@@ -114,7 +108,8 @@ html{
   align-items: center;
   padding: 10px 10px 10px 10px;
   background-color: #3399CC;
-  box-shadow: -2px 2px 10px #000000
+  box-shadow: 1px 5px 10px #000000;
+  position: relative;
 }
 .function {
   width: 100%;
@@ -127,12 +122,11 @@ html{
   flex-direction: column;
   align-items: center;
   margin-bottom: 0px;
-  background-color: #FFFFFF;
+  
   width: 60%;
   padding-bottom: 20px;
   padding-top: 20px;
-  border-radius: 25px;
-  box-shadow: inset 0px 0px 5px #000000;
+  
 }
 .el-main{
   padding: 0%;
@@ -157,5 +151,17 @@ html{
   width: 80px;
   height: 80px;
   line-height: 80px;
+}
+.side-footer{
+  position: absolute;
+  bottom: 20px;
+  text-align: center;
+  width: 100%;
+  color:rgb(214, 214, 214)
+}
+.el-avatar--circle{
+  border: 4px solid white;
+  box-sizing: border-box;
+  font-size: 30px;
 }
 </style>

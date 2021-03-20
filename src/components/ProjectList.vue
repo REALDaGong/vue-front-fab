@@ -206,6 +206,8 @@ export default {
               type: 'error',
               message: '网络错误'
             });
+            }).finally(()=>{
+              this.fetchAllProject();
             })
       } else {
       var data = {
@@ -230,9 +232,21 @@ export default {
                   addProMember({proID: res.ProID,stuName: localStorage.name,isCheck:0})
                   .then(res => {
                     console.log(res)
+                    this.$message({
+                      type: 'success',
+                      message: res.details
+                    });
                   })
                   .catch(res => {
                     console.log(res.response)
+                    this.$message({
+                      type: 'error',
+                      message: '加入成功'
+                    });
+                  })
+                  .finally(()=>{
+                    setTimeout(()=>{this.fetchAllProject();},1500)
+                    
                   })
                 }, 1500);
                 
@@ -244,8 +258,11 @@ export default {
             console.log(res)
             this.dialogFormVisible = false
           })
+          .finally(()=>{
+              this.fetchAllProject();
+            })
       }
-      this.fetchAllProject();
+      
     },
     fetchAllProject () {
       this.$refs.content.refresh()
@@ -253,7 +270,6 @@ export default {
     changeRightContent (proID) {
       this.selectedProID = proID
       localStorage.selectedProID = proID // bad action...
-      console.log("good")
       // this.$refs.sub.refresh(proID)
     },
     getCurrentProID () {
@@ -270,6 +286,14 @@ export default {
   height: 100%;
   width:auto;
   position: relative;
+  background: rgb(236, 236, 236);
+    background-image:
+        linear-gradient(rgba(255,255,255,.3) 1px, transparent 0),
+        linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 0),
+        linear-gradient(white 1px, transparent 0),
+        linear-gradient(90deg, white 1px, transparent 0);
+    background-size: 15px 15px, 15px 15px, 75px 75px, 75px 75px;
+    
 }
 #list{
   padding: 30px 10px 10px 10px;
@@ -281,10 +305,13 @@ export default {
 #content{
   padding: 10px;
   margin: 0;
+  padding-right: 30px;
   height: 100%;
   width: 100%;
   float: right;
   background-color: white;
+  box-shadow: 1px 5px 10px #000000;
+
 }
 #row{
   margin: 0 !important;
@@ -294,6 +321,12 @@ export default {
 .el-col{
   padding: 0 !important;
   height: 100%;
+}
+.el-menu--horizontal>.el-menu-item{
+  text-align: center;
+}
+.el-menu--horizontal .transparent{
+  background-color: beige;
 }
 #add{
   position: absolute;
