@@ -23,7 +23,7 @@
                 <el-input v-model="form.name" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item label="负责人名称" :label-width="formLabelWidth">
-                <el-input v-model="form.Tname" autocomplete="off" :disabled = "this.isTeacher"></el-input>
+                <el-input v-model="form.Tname" autocomplete="off" :disabled = "this.isTeacher" placeholder="非必填"></el-input>
               </el-form-item>
               <el-form-item label="结束时间" :label-width="formLabelWidth">
                 <el-date-picker
