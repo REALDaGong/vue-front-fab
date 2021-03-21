@@ -220,6 +220,7 @@
             this.subHistory = res.result;
             this.sub = this.subHistory[this.subHistory.length - 1];
             this.getMember();
+            console.log(res);
           }
         )
         .catch(

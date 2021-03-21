@@ -1,13 +1,23 @@
 <template>
   <div class="container">
     <div class="card-wrap" v-for="(o,index) in List" :key="index" v-on:click="open(index)">
-      <el-card class="card">
+      <el-card class="card" :diff="List[index].difficulty">
         <div slot="header" class="clearfix">
-          <span>{{o.name}}</span>
+          <span class="tooltip title">{{o.name.length > 6? o.name.substring(0,6)+"..." :o.name}}
+            <span v-if="o.name.length > 6" class="tooltiptext " v-on:click.stop>{{o.name}}</span>
+          </span>
+          
           <el-button v-if="canDelete(index)" style="float: right; padding: 3px 0" type="text" @click="deleteSub(index,$event)">删除</el-button>
         </div>
-        <div class="center">
-          {{o.memberNum}}名成员
+        <div class="">
+          <span>{{o.memberNum}}名成员</span><br><br>
+          <span class="tooltip small">创建于 {{o.start.substring(0,10)}}
+            <span class="tooltiptext small" v-on:click.stop>{{o.start.substring(10)}}
+              <br>结束于
+              <br>{{o.end}}
+            </span>
+            
+          </span><br>
         </div>
       </el-card>
     </div>
@@ -36,7 +46,7 @@
           <el-input type="textarea" v-model="form.desc"></el-input>
         </el-form-item>
         <el-form-item label="难度评级">
-          <el-input-number size="small" v-model="form.diff" :min=1 :max=10></el-input-number>
+          <el-input-number size="small" v-model="form.diff" :min=1 :max=4 controls-position="right"></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -167,7 +177,10 @@ export default {
               id: element.Key,
               name: element.Record.subproName,
               info: element.Record.info,
-              memberNum: element.Record.member.length
+              memberNum: element.Record.member.length,
+              difficulty: element.Record.difficulty,
+              start:element.Record.subproStartTime,
+              end:element.Record.subproEndTime
             }
           )
         })
@@ -235,9 +248,9 @@ export default {
 }
 .card-wrap{
   box-sizing: border-box;
-  flex: 0 0 25%;
+  flex: 0 0 20%;
   padding: 10px;
-  min-width: 200px;
+  min-width: 220px;
   min-height: 150px;
 }
 .card{
@@ -267,4 +280,66 @@ export default {
   font-size: 14px;
 
 }
+.card[diff="1"]{
+  border-top: 3px solid rgb(84, 255, 121);
+}
+.card[diff="2"]{
+  border-top: 3px solid rgb(255, 232, 28);
+}
+.card[diff="3"]{
+  border-top: 3px solid rgb(255, 174, 0);
+}
+.card[diff="4"]{
+  border-top: 3px solid rgb(255, 72, 0);
+}
+.card[diff="5"]{
+  border-top: 3px solid rgb(72, 72, 73);
+}
+.el-card__header [diff="0"]{
+  border-top: 3px solid blue;
+  padding:10px 20px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    
+}
+ 
+/* Tooltip 文本 */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: white;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+ 
+    /* 定位 */
+    position: absolute;
+    z-index: 999;
+    width: 120px;
+    top: 100%;
+    left: 50%; 
+    margin-left: -60px; /* 使用一半宽度 (120/2 = 60) 来居中提示工具 */
+
+    
+}
+ 
+/* 鼠标移动上去后显示提示框 */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.card{
+  overflow: unset;
+}
+.title{
+  font-weight: bold;
+}
+.small{
+  font-size: 10px;
+}
+
 </style>

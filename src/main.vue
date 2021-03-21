@@ -17,9 +17,10 @@
         </el-main>
         <el-aside width="0px">
         </el-aside>
+        <!--
         <el-aside class="side" width="350px">
           <div class="function">
-            <el-button style="float: right; padding: 3px 0; color:white;" type="text" @click="logout">登出</el-button>
+            
           </div>
           <div class="info">
             <router-link to="/userinfo">
@@ -31,7 +32,7 @@
             关于 | 帮助
           </div>
           
-        </el-aside>
+        </el-aside>-->
       </el-container>
     </el-container>
   </div>
@@ -107,7 +108,7 @@ html{
   flex-direction: column;
   align-items: center;
   padding: 10px 10px 10px 10px;
-  background-color: #3399CC;
+  background-color: #91d6f8;
   box-shadow: 1px 5px 10px #000000;
   position: relative;
 }
@@ -159,9 +160,7 @@ html{
   width: 100%;
   color:rgb(214, 214, 214)
 }
-.el-avatar--circle{
-  border: 4px solid white;
-  box-sizing: border-box;
-  font-size: 30px;
+.el-header{
+  background-color: #409EFF;
 }
 </style>

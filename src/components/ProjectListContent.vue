@@ -1,6 +1,6 @@
 <!--项目列表的主控件的列表部分-->
 <template>
-  <div id="main-container">
+  <div id="main-container-list">
 
     <el-menu
       default-active="2"
@@ -298,5 +298,8 @@ export default {
   }
   .copy{
     cursor:copy;
+  }
+  #main-container-list{
+    padding: 10px;
   }
 </style>

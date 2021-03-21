@@ -293,10 +293,10 @@ export default {
         linear-gradient(white 1px, transparent 0),
         linear-gradient(90deg, white 1px, transparent 0);
     background-size: 15px 15px, 15px 15px, 75px 75px, 75px 75px;
-    
+  
 }
 #list{
-  padding: 30px 10px 10px 10px;
+  
   margin: 0;
   height: 100%;
   /*border-right: 1px solid #87888a;
@@ -342,6 +342,10 @@ export default {
 #topic{
   width: 100%;
   text-align: center;
-  padding-bottom: 50px;
+  padding-bottom: 0px;
+  line-height: 70px;
+  background-color: white;
+  border-bottom: 1px solid rgb(224, 224, 224);
+  font-weight: bold;
 }
 </style>
