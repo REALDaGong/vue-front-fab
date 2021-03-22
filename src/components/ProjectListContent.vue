@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import {searchSIPByStu,searchProByTeacher, quitProject, finishPro} from "@/router/request"
+import {searchSIPByStu,searchProByTeacher, quitProject, finishPro, teacherQuitPro} from "@/router/request"
 export default {
   data () {
     return {
