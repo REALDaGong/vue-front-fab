@@ -234,7 +234,7 @@ export default {
                     console.log(res)
                     this.$message({
                       type: 'success',
-                      message: res.details
+                      message: '创建成功'
                     });
                   })
                   .catch(res => {
@@ -246,10 +246,10 @@ export default {
                   })
                   .finally(()=>{
                     setTimeout(()=>{this.fetchAllProject();},1500)
-                    
+
                   })
                 }, 1500);
-                
+
               }
             }
             this.dialogFormVisible = false
@@ -262,7 +262,7 @@ export default {
               this.fetchAllProject();
             })
       }
-      
+
     },
     fetchAllProject () {
       this.$refs.content.refresh()
@@ -293,10 +293,10 @@ export default {
         linear-gradient(white 1px, transparent 0),
         linear-gradient(90deg, white 1px, transparent 0);
     background-size: 15px 15px, 15px 15px, 75px 75px, 75px 75px;
-  
+
 }
 #list{
-  
+
   margin: 0;
   height: 100%;
   /*border-right: 1px solid #87888a;
